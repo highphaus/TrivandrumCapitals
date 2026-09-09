@@ -1,136 +1,181 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu as MenuIcon, X as XIcon, ChevronRight as ChevronRightIcon } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Menu as MenuIcon, X as XIcon } from "lucide-react";
 import { clubConfig } from "@/config/club";
 
 const Menu = MenuIcon as any;
 const X = XIcon as any;
-const ChevronRight = ChevronRightIcon as any;
+
+const NAV_LINKS = [
+  { href: "/", label: "Home" },
+  { href: "/#club", label: "The Club" },
+  { href: "/#trials", label: "Trials" },
+  { href: "/#contact", label: "Contact" },
+];
 
 export default function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const onScroll = useCallback(() => setScrolled(window.scrollY > 16), []);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [onScroll]);
+
+  // Close drawer when viewport becomes desktop
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const handler = (e: MediaQueryListEvent) => { if (e.matches) setOpen(false); };
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
   }, []);
 
-  // Close menu on resize to desktop
+  // Lock body scroll when drawer open
   useEffect(() => {
-    const handleResize = () => { if (window.innerWidth >= 768) setMobileMenuOpen(false); };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-brand-dark/95 backdrop-blur-md py-2 sm:py-3 border-b border-brand-blue/40 shadow-xl"
-          : "bg-gradient-to-b from-brand-dark/90 to-transparent py-3 sm:py-5"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between gap-3">
+    <>
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? "bg-brand-dark/95 backdrop-blur-md border-b border-brand-blue/30 shadow-lg py-2"
+            : "bg-gradient-to-b from-brand-dark/85 to-transparent py-3"
+        }`}
+      >
+        <div className="site-container">
+          <div className="flex items-center justify-between gap-3 h-12">
 
-          {/* Logo */}
-          <Link
-            href="/"
-            className="flex items-center gap-2 sm:gap-3 group focus:outline-none focus:ring-2 focus:ring-brand-orange shrink-0"
-            id="nav-logo"
-          >
-            <div className="relative w-9 h-9 sm:w-12 sm:h-12 flex items-center justify-center">
+            {/* Logo */}
+            <Link
+              href="/"
+              className="flex items-center gap-2.5 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange"
+              id="nav-logo"
+              onClick={() => setOpen(false)}
+            >
               <Image
                 src={clubConfig.logoUrl}
-                alt={`${clubConfig.name} Logo`}
-                width={48}
-                height={48}
-                className="object-contain w-full h-full"
+                alt="Trivandrum Capitals"
+                width={36}
+                height={36}
+                className="object-contain w-9 h-9 sm:w-10 sm:h-10"
                 priority
               />
-            </div>
-            <div className="flex flex-col leading-none">
-              <span className="font-display text-lg sm:text-2xl tracking-wider text-brand-cream uppercase leading-none group-hover:text-brand-yellow transition-colors">
-                TRIVANDRUM
-              </span>
-              <span className="font-display text-sm sm:text-lg tracking-widest text-brand-orange uppercase leading-none">
-                CAPITALS
-              </span>
-            </div>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6 lg:gap-8" aria-label="Main Navigation">
-            {["#home", "#club", "/register", "#contact"].map((href, i) => (
-              <Link
-                key={href}
-                href={href}
-                className="font-display text-base lg:text-lg tracking-wider text-brand-cream hover:text-brand-yellow transition-colors uppercase py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-orange hover:after:w-full after:transition-all"
-              >
-                {["Home", "The Club", "Register", "Contact"][i]}
-              </Link>
-            ))}
-          </nav>
-
-          {/* CTA + Hamburger */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Link
-              href="/register"
-              className="btn-primary !text-[10px] !px-2.5 !py-1.5 !min-h-0 sm:!text-sm sm:!px-4 sm:!py-2 md:!text-base md:!px-6 md:!py-2.5 shadow-[0_0_14px_rgba(232,65,3,0.65)] hover:shadow-[0_0_22px_rgba(232,65,3,0.95)] ring-1 ring-brand-orange ring-offset-1 ring-offset-brand-dark animate-pulse"
-              id="header-cta"
-            >
-              <span className="sm:hidden">REG</span>
-              <span className="hidden sm:inline">REGISTER NOW</span>
+              <div className="leading-none">
+                <div className="font-display text-base sm:text-xl tracking-wider text-brand-cream uppercase leading-none">
+                  Trivandrum
+                </div>
+                <div className="font-display text-sm sm:text-base tracking-widest text-brand-orange uppercase leading-none mt-0.5">
+                  Capitals
+                </div>
+              </div>
             </Link>
 
-            {/* Hamburger */}
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-brand-cream hover:text-brand-orange focus:outline-none focus:ring-2 focus:ring-brand-orange rounded"
-              aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-              aria-expanded={mobileMenuOpen}
-              id="mobile-menu-toggle"
-            >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            {/* Desktop nav */}
+            <nav className="hidden md:flex items-center gap-1 lg:gap-2" aria-label="Main">
+              {NAV_LINKS.map(({ href, label }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="px-3 py-2 font-display text-base lg:text-lg tracking-wider text-brand-cream/90 hover:text-brand-yellow transition-colors uppercase"
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
+
+            {/* Right: CTA + Hamburger */}
+            <div className="flex items-center gap-2">
+              <Link
+                href="/register"
+                className="btn-primary !py-2 !px-3 sm:!px-5 shadow-[0_0_12px_rgba(232,65,3,0.5)] ring-1 ring-brand-orange ring-offset-1 ring-offset-brand-dark"
+                id="header-cta"
+                style={{ fontSize: "clamp(0.7rem, 2vw, 0.9375rem)", minHeight: "2.25rem", padding: "0.4rem 0.75rem" }}
+              >
+                <span className="sm:hidden">REG</span>
+                <span className="hidden sm:inline">REGISTER NOW</span>
+              </Link>
+
+              {/* Hamburger */}
+              <button
+                type="button"
+                className="md:hidden flex items-center justify-center w-10 h-10 text-brand-cream hover:text-brand-orange transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orange"
+                onClick={() => setOpen(v => !v)}
+                aria-label={open ? "Close menu" : "Open menu"}
+                aria-expanded={open}
+                aria-controls="mobile-nav"
+                id="hamburger-btn"
+              >
+                {open ? <X size={22} /> : <Menu size={22} />}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </header>
+
+      {/* Mobile Drawer Overlay */}
+      {open && (
+        <div
+          className="fixed inset-0 z-40 bg-brand-dark/60 backdrop-blur-sm md:hidden"
+          aria-hidden="true"
+          onClick={() => setOpen(false)}
+        />
+      )}
 
       {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-brand-dark border-b-2 border-brand-orange shadow-2xl">
-          <nav className="flex flex-col px-4 pt-3 pb-2" aria-label="Mobile Navigation">
-            {(["#home", "#club", "/register", "#contact"] as const).map((href, i) => (
+      <div
+        id="mobile-nav"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation Menu"
+        className={`fixed inset-x-0 top-0 z-50 md:hidden transform transition-transform duration-300 ease-in-out ${
+          open ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
+        <div className="bg-brand-dark border-b-2 border-brand-orange shadow-2xl pt-16 pb-6">
+          {/* Close button */}
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            className="absolute top-3.5 right-4 w-10 h-10 flex items-center justify-center text-brand-cream hover:text-brand-orange transition-colors"
+            aria-label="Close navigation menu"
+          >
+            <X size={22} />
+          </button>
+
+          <nav className="site-container flex flex-col gap-1" aria-label="Mobile Navigation">
+            {NAV_LINKS.map(({ href, label }) => (
               <Link
                 key={href}
                 href={href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="font-display text-xl tracking-wider text-brand-cream hover:text-brand-orange flex items-center justify-between border-b border-brand-blue/25 py-3"
+                onClick={() => setOpen(false)}
+                className="flex items-center justify-between py-3.5 border-b border-brand-blue/20 font-display text-xl tracking-wider text-brand-cream hover:text-brand-yellow transition-colors uppercase"
               >
-                {["HOME", "THE CLUB", "REGISTER", "CONTACT"][i]}
-                <ChevronRight size={18} className="text-brand-orange" />
+                {label}
+                <span className="text-brand-orange text-sm">›</span>
               </Link>
             ))}
+
+            <div className="pt-5">
+              <Link
+                href="/register"
+                onClick={() => setOpen(false)}
+                className="btn-primary w-full justify-center text-base py-3.5"
+                id="mobile-nav-cta"
+              >
+                REGISTER NOW — FREE
+              </Link>
+            </div>
           </nav>
-          <div className="px-4 py-4">
-            <Link
-              href="/register"
-              onClick={() => setMobileMenuOpen(false)}
-              className="btn-primary w-full justify-center !text-base !py-3"
-              id="mobile-register-cta"
-            >
-              REGISTER NOW
-            </Link>
-          </div>
         </div>
-      )}
-    </header>
+      </div>
+    </>
   );
 }

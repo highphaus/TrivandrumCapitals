@@ -198,15 +198,36 @@ function PlayerRosterSection({
           return (
             <div
               key={idx}
-              className="px-5 py-3.5 flex flex-col sm:flex-row sm:items-start gap-3 bg-brand-dark hover:bg-brand-blue/5 transition-colors"
+              className="px-3.5 sm:px-5 py-3 sm:py-3.5 flex flex-col sm:flex-row sm:items-start gap-2.5 sm:gap-3 bg-brand-dark hover:bg-brand-blue/5 transition-colors"
             >
-              {/* Number Badge */}
-              <div className="shrink-0 w-8 h-8 bg-brand-orange flex items-center justify-center font-display text-brand-cream text-sm mt-5 sm:mt-6">
+              {/* Mobile Header: Badge + Label + Delete button (<640px) */}
+              <div className="flex items-center justify-between w-full sm:hidden">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 bg-brand-orange flex items-center justify-center font-display text-brand-cream text-xs font-bold shrink-0">
+                    {idx + 1}
+                  </div>
+                  <span className="text-xs text-brand-cream/70 font-semibold uppercase tracking-wider">
+                    Player {idx + 1}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => onRemovePlayer(categoryKey, idx)}
+                  disabled={players.length <= 1}
+                  title="Remove player"
+                  className="w-7 h-7 flex items-center justify-center text-brand-cream/50 hover:text-red-400 hover:bg-red-950/40 border border-brand-blue/30 hover:border-red-900/50 transition-all disabled:opacity-20 disabled:cursor-not-allowed"
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
+
+              {/* Desktop Number Badge (sm+) */}
+              <div className="hidden sm:flex shrink-0 w-8 h-8 bg-brand-orange items-center justify-center font-display text-brand-cream text-sm mt-5">
                 {idx + 1}
               </div>
 
               {/* Name */}
-              <div className="flex-1 space-y-1 min-w-0">
+              <div className="flex-1 space-y-1 min-w-0 w-full">
                 <label className="block text-[11px] font-semibold text-brand-cream/60 uppercase tracking-wider">
                   Full Name <span className="text-brand-orange">*</span>
                 </label>
@@ -215,13 +236,13 @@ function PlayerRosterSection({
                   value={player.name}
                   onChange={(e) => onPlayerChange(categoryKey, idx, "name", e.target.value)}
                   placeholder={`Player ${idx + 1} full name`}
-                  className="w-full bg-brand-dark/80 border border-brand-blue/40 hover:border-brand-blue text-brand-cream placeholder-brand-cream/25 px-3 py-2.5 text-sm focus:outline-none focus:border-brand-orange transition-colors"
+                  className="w-full bg-brand-dark/80 border border-brand-blue/40 hover:border-brand-blue text-brand-cream placeholder-brand-cream/25 px-3 py-2.5 text-base sm:text-sm focus:outline-none focus:border-brand-orange transition-colors min-h-[44px]"
                 />
                 {nameError && <p className="text-[11px] text-red-400">{nameError[0]}</p>}
               </div>
 
               {/* DOB */}
-              <div className="sm:w-48 space-y-1 shrink-0">
+              <div className="w-full sm:w-48 space-y-1 shrink-0">
                 <div className="flex items-center justify-between gap-2">
                   <label className="block text-[11px] font-semibold text-brand-cream/60 uppercase tracking-wider">
                     Date of Birth <span className="text-brand-orange">*</span>
@@ -240,13 +261,13 @@ function PlayerRosterSection({
                   type="date"
                   value={player.dob}
                   onChange={(e) => onPlayerChange(categoryKey, idx, "dob", e.target.value)}
-                  className="w-full bg-brand-dark/80 border border-brand-blue/40 hover:border-brand-blue text-brand-cream px-3 py-2.5 text-sm focus:outline-none focus:border-brand-orange transition-colors"
+                  className="w-full bg-brand-dark/80 border border-brand-blue/40 hover:border-brand-blue text-brand-cream px-3 py-2.5 text-base sm:text-sm focus:outline-none focus:border-brand-orange transition-colors min-h-[44px]"
                 />
                 {dobError && <p className="text-[11px] text-red-400">{dobError[0]}</p>}
               </div>
 
-              {/* Remove */}
-              <div className="shrink-0 flex items-end pb-0.5 sm:pt-6">
+              {/* Remove button on Desktop (sm+) */}
+              <div className="hidden sm:flex shrink-0 items-end pb-0.5 pt-5">
                 <button
                   type="button"
                   onClick={() => onRemovePlayer(categoryKey, idx)}
@@ -445,10 +466,10 @@ export default function TrialRegistrationForm() {
 
   return (
     <section id="trials" className="section-pad bg-brand-dark relative court-overlay">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="site-container">
         
         {/* WELCOME BANNER & OFFICIAL LEAGUE GUIDELINES */}
-        <div className="bg-brand-dark/95 border-2 sm:border-4 border-brand-orange p-4 sm:p-10 mb-12 shadow-2xl space-y-6 relative" id="register-form">
+        <div className="bg-brand-dark/95 border-2 sm:border-4 border-brand-orange p-3.5 xs:p-5 sm:p-8 lg:p-10 mb-8 sm:mb-12 shadow-2xl space-y-5 sm:space-y-6 relative" id="register-form">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-brand-orange/40 pb-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-orange/20 border border-brand-orange text-brand-orange font-display text-sm tracking-wider uppercase">
               <ShieldCheck size={18} />

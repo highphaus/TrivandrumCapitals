@@ -2,30 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Fluid Typography Scale (clamp: min, preferred, max) ───────────────── */
+/* ─────────────────────────────────────────────────────────────────────────────
+   TRIVANDRUM CAPITALS — Mobile-First Design System
+   Enterprise-Quality Responsive CSS (320px to 4K)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* ─── Design Tokens ─────────────────────────────────────────────────────────── */
 :root {
-  /* Headings */
-  --text-hero:    clamp(2rem,    8vw,  6rem);   /* Hero h1        */
-  --text-h1:      clamp(1.75rem, 6vw,  4.5rem); /* Section title  */
-  --text-h2:      clamp(1.5rem,  4vw,  3rem);   /* Sub-heading    */
-  --text-h3:      clamp(1.25rem, 3vw,  2rem);   /* Card heading   */
-  --text-h4:      clamp(1.1rem,  2vw,  1.5rem); /* Label heading  */
-
-  /* Body */
-  --text-lg:      clamp(1rem,    1.5vw, 1.25rem);
-  --text-base:    clamp(0.875rem,1.2vw, 1rem);
-  --text-sm:      clamp(0.8rem,  1vw,  0.9rem);
-  --text-xs:      clamp(0.7rem,  0.8vw, 0.8rem);
-
   /* Brand Colors */
-  --color-dark:   #032245;
-  --color-blue:   #1D719C;
-  --color-orange: #E84103;
-  --color-yellow: #FBA643;
-  --color-cream:  #FDF7D6;
+  --c-dark:    #032245;
+  --c-blue:    #1D719C;
+  --c-orange:  #E84103;
+  --c-yellow:  #FBA643;
+  --c-cream:   #FDF7D6;
+
+  /* Fluid Type Scale — clamp(min, preferred-vw, max) */
+  --t-hero:    clamp(2.125rem, 8vw, 5.5rem);     /* 34px → 88px  */
+  --t-h1:      clamp(1.75rem,  5.5vw, 4rem);     /* 28px → 64px  */
+  --t-h2:      clamp(1.375rem, 3.8vw, 2.5rem);   /* 22px → 40px  */
+  --t-h3:      clamp(1.125rem, 2.6vw, 1.75rem);  /* 18px → 28px  */
+  --t-h4:      clamp(1rem,     1.8vw, 1.375rem); /* 16px → 22px  */
+  --t-body:    clamp(0.9375rem, 1.2vw, 1.0625rem);/* 15px → 17px */
+  --t-sm:      clamp(0.8125rem, 1vw, 0.9375rem); /* 13px → 15px  */
+  --t-xs:      clamp(0.6875rem, 0.85vw, 0.8125rem);/* 11px → 13px */
+  --t-label:   clamp(0.625rem, 0.75vw, 0.75rem); /* 10px → 12px  */
+
+  /* Spacing */
+  --px-mobile: 1rem;       /* 16px */
+  --px-tablet: 1.5rem;     /* 24px */
+  --px-desktop: 2rem;      /* 32px */
+  --section-py: clamp(3rem, 7vw, 6.5rem);
+
+  /* Touch targets */
+  --touch-min: 2.75rem;    /* 44px */
 }
 
-/* ─── Base Layer ─────────────────────────────────────────────────────────── */
+/* ─── Base Reset & Globals ───────────────────────────────────────────────────── */
 @layer base {
   *, *::before, *::after {
     box-sizing: border-box;
@@ -33,162 +45,222 @@
 
   html {
     overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   body {
-    background-color: var(--color-dark);
-    color: var(--color-cream);
-    font-family: var(--font-jakarta), sans-serif;
     overflow-x: hidden;
-    -webkit-text-size-adjust: 100%;
+    background-color: var(--c-dark);
+    color: var(--c-cream);
+    font-family: var(--font-jakarta), system-ui, -apple-system, sans-serif;
+    font-size: var(--t-body);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-bebas), sans-serif;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+  /* Prevent iOS input auto-zoom: text must be at least 16px */
+  input, select, textarea {
+    font-size: 16px !important;
   }
 
-  img, video {
+  img, video, picture {
+    display: block;
     max-width: 100%;
     height: auto;
   }
 
-  input, select, textarea, button {
-    min-height: 44px; /* minimum touch target */
+  /* All interactive elements: minimum touch target */
+  button, [role="button"], a, label[for], input[type="checkbox"], input[type="radio"] {
+    min-height: var(--touch-min);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-bebas), sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1;
   }
 
   ::selection {
-    background-color: var(--color-orange);
-    color: var(--color-cream);
+    background-color: var(--c-orange);
+    color: var(--c-cream);
   }
 }
 
-/* ─── Court Grid Texture ─────────────────────────────────────────────────── */
+/* ─── Layout & Container Utilities ───────────────────────────────────────────── */
+@layer utilities {
+  .site-container,
+  .container-pad {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: var(--px-mobile);
+  }
+
+  @media (min-width: 640px) {
+    .site-container,
+    .container-pad {
+      padding-inline: var(--px-tablet);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .site-container,
+    .container-pad {
+      padding-inline: var(--px-desktop);
+    }
+  }
+
+  .section-spacing,
+  .section-pad {
+    padding-block: var(--section-py);
+  }
+
+  /* Fluid typography helper classes */
+  .t-hero, .fluid-hero  { font-size: var(--t-hero);  line-height: 0.95; }
+  .t-h1, .fluid-h1      { font-size: var(--t-h1);    line-height: 0.98; }
+  .t-h2, .fluid-h2      { font-size: var(--t-h2);    line-height: 1.05; }
+  .t-h3, .fluid-h3      { font-size: var(--t-h3);    line-height: 1.15; }
+  .t-h4, .fluid-h4      { font-size: var(--t-h4);    line-height: 1.25; }
+  .t-body, .prose-fluid { font-size: var(--t-body);  line-height: 1.65; }
+  .t-sm                 { font-size: var(--t-sm);    line-height: 1.55; }
+  .t-xs, .fluid-xs      { font-size: var(--t-xs);    line-height: 1.5;  }
+  .t-label, .status-label {
+    font-size: var(--t-label);
+    line-height: 1.3;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .status-value {
+    font-size: clamp(0.9375rem, 2vw, 1.25rem);
+    line-height: 1.1;
+    font-weight: 700;
+  }
+
+  /* Overflow and truncation utilities */
+  .no-overflow {
+    overflow: hidden;
+    overflow-x: clip;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* ─── Decorative Elements ────────────────────────────────────────────────────── */
 .court-overlay {
   position: relative;
 }
-
 .court-overlay::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 30% 50%, rgba(232, 65, 3, 0.05) 0%, transparent 65%);
+  background: radial-gradient(ellipse at 30% 50%, rgba(232, 65, 3, 0.05) 0%, transparent 60%);
   pointer-events: none;
+  z-index: 0;
 }
-
-/* ─── Basketball Key Circle Graphic ─────────────────────────────────────── */
 .court-key-circle {
-  border: 2px solid rgba(251, 166, 67, 0.20);
+  border: 2px solid rgba(251, 166, 67, 0.15);
   border-radius: 50%;
 }
 
-/* ─── Button System ──────────────────────────────────────────────────────── */
-
-/* PRIMARY — Orange fill → transparent on hover */
-.btn-primary {
-  @apply inline-flex items-center justify-center font-display uppercase tracking-wider
-         bg-brand-orange text-brand-cream border-2 border-brand-orange
-         hover:bg-transparent hover:text-brand-orange
-         transition-all duration-200 cursor-pointer shadow-lg
-         active:translate-y-0.5
-         text-sm px-4 py-2.5
-         sm:text-base sm:px-6 sm:py-3
-         md:text-lg md:px-8 md:py-3.5;
-  min-height: 44px;
-}
-
-/* SECONDARY — Transparent cream border → cream fill on hover */
-.btn-secondary {
-  @apply inline-flex items-center justify-center font-display uppercase tracking-wider
-         bg-transparent text-brand-cream border-2 border-brand-cream
-         hover:bg-brand-cream hover:text-brand-dark
-         transition-all duration-200 cursor-pointer
-         active:translate-y-0.5
-         text-sm px-4 py-2.5
-         sm:text-base sm:px-6 sm:py-3
-         md:text-lg md:px-8 md:py-3.5;
-  min-height: 44px;
-}
-
-/* YELLOW — Yellow fill, dark text */
-.btn-yellow {
-  @apply inline-flex items-center justify-center font-display uppercase tracking-wider
-         bg-brand-yellow text-brand-dark border-2 border-brand-yellow
-         hover:bg-transparent hover:text-brand-yellow
-         transition-all duration-200 cursor-pointer
-         active:translate-y-0.5
-         text-sm px-4 py-2.5
-         sm:text-base sm:px-6 sm:py-3
-         md:text-lg md:px-8 md:py-3.5;
-  min-height: 44px;
-}
-
-/* ─── Brand Tri-Color Divider ────────────────────────────────────────────── */
-.brand-divider {
-  height: 3px;
-  background: linear-gradient(to right, #E84103, #FBA643, #032245);
-}
-
-/* ─── Form Inputs ────────────────────────────────────────────────────────── */
-.form-input {
-  @apply w-full bg-brand-dark border-2 border-brand-blue/50 text-brand-cream 
-         px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base
-         focus:outline-none focus:border-brand-orange transition-colors;
-  min-height: 44px;
-}
-
-/* ─── Section Spacing ────────────────────────────────────────────────────── */
-.section-pad {
-  @apply py-14 sm:py-20 lg:py-28;
-}
-
-.container-pad {
-  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-}
-
-/* ─── Scrollbar ──────────────────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #010e1e; }
-::-webkit-scrollbar-thumb { background: #032245; border-radius: 0; }
-::-webkit-scrollbar-thumb:hover { background: #E84103; }
-
-/* ─── Fluid Typography Utilities ─────────────────────────────────────────── */
-/* Use these classes directly on elements instead of fixed text-* sizes */
-
-.fluid-hero  { font-size: var(--text-hero);  line-height: 0.9; }
-.fluid-h1    { font-size: var(--text-h1);    line-height: 1.0; }
-.fluid-h2    { font-size: var(--text-h2);    line-height: 1.05; }
-.fluid-h3    { font-size: var(--text-h3);    line-height: 1.1; }
-.fluid-h4    { font-size: var(--text-h4);    line-height: 1.2; }
-.fluid-lg    { font-size: var(--text-lg);    line-height: 1.6; }
-.fluid-base  { font-size: var(--text-base);  line-height: 1.65; }
-.fluid-sm    { font-size: var(--text-sm);    line-height: 1.6; }
-.fluid-xs    { font-size: var(--text-xs);    line-height: 1.5; }
-
-/* ─── Status Bar Label ───────────────────────────────────────────────────── */
-.status-label {
-  font-size: clamp(0.65rem, 1.5vw, 0.75rem);
+/* ─── Button System ──────────────────────────────────────────────────────────── */
+.btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-bebas), sans-serif;
+  font-size: clamp(0.875rem, 1.8vw, 1.0625rem);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-weight: 600;
-}
-
-.status-value {
-  font-size: clamp(0.85rem, 2.5vw, 1.125rem);
-  line-height: 1.3;
-}
-
-/* ─── Section number accent ─────────────────────────────────────────────── */
-.section-number {
-  font-size: clamp(1.75rem, 5vw, 2.5rem);
-  font-family: var(--font-bebas), sans-serif;
+  padding: 0.75rem 1.375rem;
+  min-height: 2.75rem;
+  border-width: 2px;
+  border-style: solid;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
   line-height: 1;
+  text-decoration: none;
+  user-select: none;
 }
 
-/* ─── Mobile-first readable paragraph ───────────────────────────────────── */
-.prose-fluid {
-  font-size: clamp(0.875rem, 2vw, 1.125rem);
-  line-height: 1.7;
+.btn-primary {
+  @apply btn-base;
+  background-color: var(--c-orange);
+  color: var(--c-cream);
+  border-color: var(--c-orange);
+}
+.btn-primary:hover {
+  background-color: transparent;
+  color: var(--c-orange);
 }
 
+.btn-secondary {
+  @apply btn-base;
+  background-color: transparent;
+  color: var(--c-cream);
+  border-color: var(--c-cream);
+}
+.btn-secondary:hover {
+  background-color: var(--c-cream);
+  color: var(--c-dark);
+}
+
+.btn-yellow {
+  @apply btn-base;
+  background-color: var(--c-yellow);
+  color: var(--c-dark);
+  border-color: var(--c-yellow);
+}
+.btn-yellow:hover {
+  background-color: transparent;
+  color: var(--c-yellow);
+}
+
+/* ─── Form Elements ──────────────────────────────────────────────────────────── */
+.form-field {
+  width: 100%;
+  background-color: color-mix(in srgb, var(--c-dark), transparent 5%);
+  border: 2px solid color-mix(in srgb, var(--c-blue), transparent 50%);
+  color: var(--c-cream);
+  padding: 0.75rem 1rem;
+  font-size: 16px;
+  transition: border-color 0.2s;
+  min-height: var(--touch-min);
+  border-radius: 0;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.form-field:focus {
+  border-color: var(--c-orange);
+}
+.form-field::placeholder {
+  color: rgba(253, 247, 214, 0.3);
+}
+
+/* ─── Section Badge ──────────────────────────────────────────────────────────── */
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  background: color-mix(in srgb, var(--c-blue), transparent 75%);
+  border-left: 3px solid var(--c-orange);
+  font-size: var(--t-label);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  color: var(--c-cream);
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--c-dark); }
+::-webkit-scrollbar-thumb { background: var(--c-blue); }
+::-webkit-scrollbar-thumb:hover { background: var(--c-orange); }
