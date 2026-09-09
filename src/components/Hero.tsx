@@ -39,14 +39,13 @@ export default function Hero() {
         <div className="max-w-xl sm:max-w-2xl lg:max-w-3xl">
 
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-4 sm:py-1.5 bg-brand-blue/25 border-l-4 border-brand-orange text-brand-cream text-[10px] sm:text-xs uppercase tracking-widest font-semibold mb-4 sm:mb-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-4 sm:py-1.5 bg-brand-blue/25 border-l-4 border-brand-orange text-brand-cream uppercase tracking-widest font-semibold mb-4 sm:mb-6 fluid-xs">
             <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-brand-yellow animate-pulse shrink-0" />
             <span className="truncate">{clubConfig.heroLabel}</span>
           </div>
 
           {/* Headline */}
-          <h1 className="font-display font-bold tracking-tight text-brand-cream uppercase drop-shadow-md leading-[0.9] mb-4 sm:mb-6
-            text-[2.5rem] xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl">
+          <h1 className="font-display font-bold tracking-tight text-brand-cream uppercase drop-shadow-md leading-[0.9] mb-4 sm:mb-6 fluid-hero">
             THE CAPITAL <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange via-brand-yellow to-brand-orange">
               RISES.
@@ -54,7 +53,7 @@ export default function Hero() {
           </h1>
 
           {/* Subtext */}
-          <p className="text-sm sm:text-base lg:text-xl text-brand-cream/85 font-normal leading-relaxed mb-6 sm:mb-8 border-l-2 border-brand-blue pl-3 sm:pl-4 max-w-lg">
+          <p className="prose-fluid text-brand-cream/85 font-normal mb-6 sm:mb-8 border-l-2 border-brand-blue pl-3 sm:pl-4 max-w-lg">
             {clubConfig.heroSubtext}
           </p>
 
@@ -72,16 +71,16 @@ export default function Hero() {
           {/* Stats bar */}
           <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-brand-blue/30 grid grid-cols-3 gap-2 sm:gap-6 max-w-sm sm:max-w-lg">
             <div className="flex flex-col">
-              <span className="font-display text-sm sm:text-xl lg:text-2xl text-brand-yellow tracking-wider leading-tight">TRIVANDRUM</span>
-              <span className="text-[9px] sm:text-xs text-brand-cream/60 uppercase tracking-widest font-medium mt-0.5">Home City</span>
+              <span className="font-display text-brand-yellow tracking-wider leading-tight status-value">TRIVANDRUM</span>
+              <span className="text-brand-cream/60 uppercase font-medium mt-0.5 status-label">Home City</span>
             </div>
             <div className="flex flex-col border-l border-brand-blue/40 pl-2 sm:pl-4">
-              <span className="font-display text-sm sm:text-xl lg:text-2xl text-brand-orange leading-tight">YOUTH &amp; SR</span>
-              <span className="text-[9px] sm:text-xs text-brand-cream/60 uppercase tracking-widest font-medium mt-0.5">Trial Rosters</span>
+              <span className="font-display text-brand-orange leading-tight status-value">YOUTH &amp; SR</span>
+              <span className="text-brand-cream/60 uppercase font-medium mt-0.5 status-label">Trial Rosters</span>
             </div>
             <div className="flex flex-col border-l border-brand-blue/40 pl-2 sm:pl-4">
-              <span className="font-display text-sm sm:text-xl lg:text-2xl text-brand-cream leading-tight">2026</span>
-              <span className="text-[9px] sm:text-xs text-brand-cream/60 uppercase tracking-widest font-medium mt-0.5">Season</span>
+              <span className="font-display text-brand-cream leading-tight status-value">2026</span>
+              <span className="text-brand-cream/60 uppercase font-medium mt-0.5 status-label">Season</span>
             </div>
           </div>
         </div>

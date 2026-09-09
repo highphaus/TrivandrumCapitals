@@ -23,8 +23,8 @@ export default function TrialStatusBar() {
               <Calendar size={20} />
             </div>
             <div>
-              <div className="text-[11px] uppercase tracking-widest text-brand-cream/60 font-semibold">Player Trials</div>
-              <div className="font-display text-base tracking-wide text-brand-yellow flex items-center gap-2 mt-0.5">
+              <div className="status-label text-brand-cream/60">Player Trials</div>
+              <div className="font-display status-value text-brand-yellow flex items-center gap-2 mt-0.5">
                 <span className="w-2 h-2 rounded-full bg-green-500 animate-ping inline-block shrink-0" />
                 {trialStatus.statusText}
               </div>
@@ -37,8 +37,8 @@ export default function TrialStatusBar() {
               <MapPin size={20} />
             </div>
             <div>
-              <div className="text-[11px] uppercase tracking-widest text-brand-cream/60 font-semibold">Location</div>
-              <div className="font-display text-base tracking-wide text-brand-cream mt-0.5">{trialStatus.location}</div>
+              <div className="status-label text-brand-cream/60">Location</div>
+              <div className="font-display status-value text-brand-cream mt-0.5">{trialStatus.location}</div>
             </div>
           </div>
 
@@ -48,8 +48,8 @@ export default function TrialStatusBar() {
               <Users size={20} />
             </div>
             <div>
-              <div className="text-[11px] uppercase tracking-widest text-brand-cream/60 font-semibold">Categories</div>
-              <div className="font-display text-base tracking-wide text-brand-cream mt-0.5">{trialStatus.categories}</div>
+              <div className="status-label text-brand-cream/60">Categories</div>
+              <div className="font-display status-value text-brand-cream mt-0.5">{trialStatus.categories}</div>
             </div>
           </div>
 
@@ -77,8 +77,8 @@ export default function TrialStatusBar() {
                 <Calendar size={20} />
               </div>
               <div>
-                <div className="text-xs uppercase tracking-wider text-brand-cream/70 font-semibold">Player Trials</div>
-                <div className="font-display text-lg tracking-wide text-brand-yellow flex items-center gap-2">
+                <div className="status-label text-brand-cream/70">Player Trials</div>
+                <div className="font-display status-value text-brand-yellow flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-green-500 animate-ping inline-block shrink-0" />
                   {trialStatus.statusText}
                 </div>
@@ -91,8 +91,8 @@ export default function TrialStatusBar() {
                 <MapPin size={20} />
               </div>
               <div>
-                <div className="text-xs uppercase tracking-wider text-brand-cream/70 font-semibold">Location</div>
-                <div className="font-display text-lg tracking-wide text-brand-cream">{trialStatus.location}</div>
+                <div className="status-label text-brand-cream/70">Location</div>
+                <div className="font-display status-value text-brand-cream">{trialStatus.location}</div>
               </div>
             </div>
 
@@ -102,8 +102,8 @@ export default function TrialStatusBar() {
                 <Users size={20} />
               </div>
               <div>
-                <div className="text-xs uppercase tracking-wider text-brand-cream/70 font-semibold">Categories</div>
-                <div className="font-display text-lg tracking-wide text-brand-cream">{trialStatus.categories}</div>
+                <div className="status-label text-brand-cream/70">Categories</div>
+                <div className="font-display status-value text-brand-cream">{trialStatus.categories}</div>
               </div>
             </div>
           </div>

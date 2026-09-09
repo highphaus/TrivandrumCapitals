@@ -460,7 +460,8 @@ export default function TrialRegistrationForm() {
           </div>
 
           <div className="space-y-3">
-            <h2 className="font-display text-3xl sm:text-5xl lg:text-6xl text-brand-cream font-bold uppercase tracking-tight leading-none">
+            <h2 className="font-display text-brand-cream font-bold uppercase tracking-tight leading-none whitespace-nowrap overflow-hidden text-ellipsis"
+              style={{ fontSize: "clamp(1.1rem, 4.5vw, 3.75rem)" }}>
               BLK BUDDIES LEAGUE – <span className="text-brand-orange">TRIVANDRUM</span>
             </h2>
             <p className="text-brand-yellow font-display text-lg sm:text-2xl uppercase tracking-wide">
