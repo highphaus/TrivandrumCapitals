@@ -27,7 +27,7 @@ export default function RecruitmentFeature() {
                   src="/images/recruitment-action.jpg"
                   alt="Player Recruitment Action - Trivandrum Capitals"
                   fill
-                  className="object-cover object-center grayscale hover:grayscale-0 transition-all duration-500 transform hover:scale-105"
+                  className="object-cover object-center transition-all duration-500 transform hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-transparent opacity-80" />
               </div>

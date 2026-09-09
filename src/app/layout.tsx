@@ -35,6 +35,11 @@ export const metadata: Metadata = {
     locale: "en_IN",
     type: "website",
   },
+  icons: {
+    icon: "/images/TrivandrumCaptials.png",
+    apple: "/images/TrivandrumCaptials.png",
+    shortcut: "/images/TrivandrumCaptials.png",
+  },
   twitter: {
     card: "summary_large_image",
     title: `${clubConfig.name} | Official Basketball Club`,

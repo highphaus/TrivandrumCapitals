@@ -155,10 +155,10 @@ export default function Footer() {
               Register now for Trivandrum Capitals youth & senior trial evaluations.
             </p>
             <Link
-              href="#trials"
+              href="/register"
               className="btn-primary w-full py-2.5 text-center text-base block"
             >
-              REGISTER FOR TRIALS
+              REGISTER NOW
             </Link>
           </div>
 

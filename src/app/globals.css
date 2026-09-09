@@ -2,14 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Brand Color Tokens ─────────────────────────────────────────────────── */
 :root {
-  --color-dark: #032245;
-  --color-blue: #1D719C;
-  --color-orange: #E84103;
-  --color-yellow: #FBA643;
-  --color-cream: #FDF7D6;
+  --color-dark:   #032245;  /* Dark Blue — background        */
+  --color-blue:   #1D719C;  /* Blue — borders, structure     */
+  --color-orange: #E84103;  /* Orange — CTAs, actions        */
+  --color-yellow: #FBA643;  /* Yellow — headings, highlights */
+  --color-cream:  #FDF7D6;  /* Cream — body text             */
 }
 
+/* ─── Base Layer ─────────────────────────────────────────────────────────── */
 @layer base {
   body {
     background-color: var(--color-dark);
@@ -23,46 +25,70 @@
     letter-spacing: 0.05em;
     text-transform: uppercase;
   }
+
+  ::selection {
+    background-color: var(--color-orange);
+    color: var(--color-cream);
+  }
 }
 
-/* Court lines graphic accent overlay */
+/* ─── Court Grid Texture (removed) ─────────────────────────────────────── */
 .court-overlay {
-  background-image: 
-    linear-gradient(to right, rgba(29, 113, 156, 0.15) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(29, 113, 156, 0.15) 1px, transparent 1px);
-  background-size: 60px 60px;
+  position: relative;
 }
 
-/* Basketball Key Line graphic */
+/* Subtle radial orange glow */
+.court-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 30% 50%, rgba(232, 65, 3, 0.05) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+/* ─── Basketball Key Circle Graphic ─────────────────────────────────────── */
 .court-key-circle {
-  border: 2px solid rgba(251, 166, 67, 0.25);
+  border: 2px solid rgba(251, 166, 67, 0.20);
   border-radius: 50%;
 }
 
-/* Sharp athletic button styles */
+/* ─── Button System ──────────────────────────────────────────────────────── */
+
+/* PRIMARY — Orange fill → transparent on hover */
 .btn-primary {
-  @apply inline-flex items-center justify-center font-display text-xl uppercase tracking-wider bg-brand-orange text-brand-cream px-8 py-3.5 border-2 border-brand-orange hover:bg-transparent hover:text-brand-orange transition-all duration-200 cursor-pointer shadow-lg active:translate-y-0.5;
+  @apply inline-flex items-center justify-center font-display text-xl uppercase tracking-wider
+         bg-brand-orange text-brand-cream px-8 py-3.5 border-2 border-brand-orange
+         hover:bg-transparent hover:text-brand-orange
+         transition-all duration-200 cursor-pointer shadow-lg
+         active:translate-y-0.5;
 }
 
+/* SECONDARY — Transparent cream border → cream fill on hover */
 .btn-secondary {
-  @apply inline-flex items-center justify-center font-display text-xl uppercase tracking-wider bg-transparent text-brand-cream px-8 py-3.5 border-2 border-brand-cream hover:bg-brand-cream hover:text-brand-dark transition-all duration-200 cursor-pointer active:translate-y-0.5;
+  @apply inline-flex items-center justify-center font-display text-xl uppercase tracking-wider
+         bg-transparent text-brand-cream px-8 py-3.5 border-2 border-brand-cream
+         hover:bg-brand-cream hover:text-brand-dark
+         transition-all duration-200 cursor-pointer
+         active:translate-y-0.5;
 }
 
+/* YELLOW — Yellow fill, dark text */
 .btn-yellow {
-  @apply inline-flex items-center justify-center font-display text-xl uppercase tracking-wider bg-brand-yellow text-brand-dark px-8 py-3.5 border-2 border-brand-yellow hover:bg-transparent hover:text-brand-yellow transition-all duration-200 cursor-pointer active:translate-y-0.5;
+  @apply inline-flex items-center justify-center font-display text-xl uppercase tracking-wider
+         bg-brand-yellow text-brand-dark px-8 py-3.5 border-2 border-brand-yellow
+         hover:bg-transparent hover:text-brand-yellow
+         transition-all duration-200 cursor-pointer
+         active:translate-y-0.5;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+/* ─── Brand Tri-Color Divider ────────────────────────────────────────────── */
+.brand-divider {
+  height: 3px;
+  background: linear-gradient(to right, #E84103, #FBA643, #032245);
 }
-::-webkit-scrollbar-track {
-  background: #032245;
-}
-::-webkit-scrollbar-thumb {
-  background: #1D719C;
-  border-radius: 0px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #E84103;
-}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #010e1e; }
+::-webkit-scrollbar-thumb { background: #032245; border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: #E84103; }

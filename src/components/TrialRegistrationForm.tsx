@@ -62,9 +62,8 @@ interface FormState {
   consent: boolean;
 }
 
-const create10Players = (): Player[] => {
-  return Array.from({ length: 10 }, () => ({ name: "", dob: "" }));
-};
+const createEmptyPlayer = (): Player => ({ name: "", dob: "" });
+const createInitialPlayers = (): Player[] => [createEmptyPlayer()];
 
 const initialFormState: FormState = {
   schoolName: "",
@@ -82,10 +81,10 @@ const initialFormState: FormState = {
   registerU10Girls: false,
   registerU12Boys: false,
   registerU12Girls: false,
-  u10BoysPlayers: create10Players(),
-  u10GirlsPlayers: create10Players(),
-  u12BoysPlayers: create10Players(),
-  u12GirlsPlayers: create10Players(),
+  u10BoysPlayers: createInitialPlayers(),
+  u10GirlsPlayers: createInitialPlayers(),
+  u12BoysPlayers: createInitialPlayers(),
+  u12GirlsPlayers: createInitialPlayers(),
   consent: false,
 };
 
@@ -97,6 +96,206 @@ function generateReferenceNumber(): string {
   }
   return `BLK-SCH-${random}`;
 }
+
+// ─── Player Roster Sub-Component ────────────────────────────────────────────
+
+interface PlayerRosterSectionProps {
+  title: string;
+  eligibility: string;
+  cutoffDate: string;
+  categoryKey: "u10BoysPlayers" | "u10GirlsPlayers" | "u12BoysPlayers" | "u12GirlsPlayers";
+  players: Player[];
+  fieldErrors: Record<string, string[]>;
+  onPlayerChange: (
+    categoryKey: "u10BoysPlayers" | "u10GirlsPlayers" | "u12BoysPlayers" | "u12GirlsPlayers",
+    index: number,
+    field: "name" | "dob",
+    value: string
+  ) => void;
+  onAddPlayer: (categoryKey: "u10BoysPlayers" | "u10GirlsPlayers" | "u12BoysPlayers" | "u12GirlsPlayers") => void;
+  onRemovePlayer: (categoryKey: "u10BoysPlayers" | "u10GirlsPlayers" | "u12BoysPlayers" | "u12GirlsPlayers", index: number) => void;
+}
+
+function PlayerRosterSection({
+  title,
+  eligibility,
+  cutoffDate,
+  categoryKey,
+  players,
+  fieldErrors,
+  onPlayerChange,
+  onAddPlayer,
+  onRemovePlayer,
+}: PlayerRosterSectionProps) {
+  const count = players.length;
+  const isComplete = count === 10;
+  const progressPct = (count / 10) * 100;
+
+  return (
+    <div className="border-2 border-brand-blue/40 overflow-hidden">
+
+      {/* ── Header Strip ── */}
+      <div className="bg-brand-blue/20 px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-brand-blue/40">
+        <div>
+          <h4 className="font-display text-2xl text-brand-yellow uppercase tracking-wide">
+            🏀 {title}
+          </h4>
+          <p className="text-xs text-brand-cream/70 font-medium mt-0.5">
+            Eligibility cut-off: <span className="text-brand-orange font-bold">{eligibility}</span>
+          </p>
+        </div>
+
+        {/* Progress pill */}
+        <div className={`flex items-center gap-2 px-4 py-2 border text-sm font-display tracking-widest shrink-0 ${
+          isComplete
+            ? "border-green-500/60 bg-green-900/30 text-green-400"
+            : "border-brand-yellow/50 bg-brand-yellow/10 text-brand-yellow"
+        }`}>
+          {isComplete ? <Check size={15} /> : <Users size={15} />}
+          {count} / 10 PLAYERS
+        </div>
+      </div>
+
+      {/* ── Progress Bar ── */}
+      <div className="h-1.5 w-full bg-brand-dark">
+        <div
+          className={`h-full transition-all duration-500 ${isComplete ? "bg-green-500" : "bg-brand-orange"}`}
+          style={{ width: `${progressPct}%` }}
+        />
+      </div>
+
+      {/* ── Step Dots ── */}
+      <div className="px-5 pt-4 pb-2 flex items-center gap-1.5 flex-wrap">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <div
+            key={i}
+            className={`w-6 h-6 flex items-center justify-center text-[10px] font-bold border transition-all duration-200 ${
+              i < count
+                ? "bg-brand-orange border-brand-orange text-brand-cream"
+                : "border-brand-blue/40 text-brand-blue/40"
+            }`}
+          >
+            {i + 1}
+          </div>
+        ))}
+        <span className="text-xs text-brand-cream/50 ml-2">
+          {isComplete ? "✅ Roster complete!" : `${10 - count} more needed`}
+        </span>
+      </div>
+
+      {fieldErrors[categoryKey] && (
+        <p className="px-5 pb-2 text-xs text-red-400 font-medium">{fieldErrors[categoryKey][0]}</p>
+      )}
+
+      {/* ── Player Rows ── */}
+      <div className="divide-y divide-brand-blue/20">
+        {players.map((player, idx) => {
+          const isEligible = checkDobEligibility(player.dob, cutoffDate);
+          const nameError = fieldErrors[`${categoryKey}_${idx}_name`];
+          const dobError = fieldErrors[`${categoryKey}_${idx}_dob`];
+          const hasValidDob = player.dob !== "";
+
+          return (
+            <div
+              key={idx}
+              className="px-5 py-3.5 flex flex-col sm:flex-row sm:items-start gap-3 bg-brand-dark hover:bg-brand-blue/5 transition-colors"
+            >
+              {/* Number Badge */}
+              <div className="shrink-0 w-8 h-8 bg-brand-orange flex items-center justify-center font-display text-brand-cream text-sm mt-5 sm:mt-6">
+                {idx + 1}
+              </div>
+
+              {/* Name */}
+              <div className="flex-1 space-y-1 min-w-0">
+                <label className="block text-[11px] font-semibold text-brand-cream/60 uppercase tracking-wider">
+                  Full Name <span className="text-brand-orange">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={player.name}
+                  onChange={(e) => onPlayerChange(categoryKey, idx, "name", e.target.value)}
+                  placeholder={`Player ${idx + 1} full name`}
+                  className="w-full bg-brand-dark/80 border border-brand-blue/40 hover:border-brand-blue text-brand-cream placeholder-brand-cream/25 px-3 py-2.5 text-sm focus:outline-none focus:border-brand-orange transition-colors"
+                />
+                {nameError && <p className="text-[11px] text-red-400">{nameError[0]}</p>}
+              </div>
+
+              {/* DOB */}
+              <div className="sm:w-48 space-y-1 shrink-0">
+                <div className="flex items-center justify-between gap-2">
+                  <label className="block text-[11px] font-semibold text-brand-cream/60 uppercase tracking-wider">
+                    Date of Birth <span className="text-brand-orange">*</span>
+                  </label>
+                  {hasValidDob && (
+                    <span className={`text-[10px] font-bold px-1.5 py-0.5 shrink-0 ${
+                      isEligible
+                        ? "bg-green-900/60 text-green-400 border border-green-700/50"
+                        : "bg-red-900/60 text-red-400 border border-red-700/50"
+                    }`}>
+                      {isEligible ? "✓ OK" : "✗ Age"}
+                    </span>
+                  )}
+                </div>
+                <input
+                  type="date"
+                  value={player.dob}
+                  onChange={(e) => onPlayerChange(categoryKey, idx, "dob", e.target.value)}
+                  className="w-full bg-brand-dark/80 border border-brand-blue/40 hover:border-brand-blue text-brand-cream px-3 py-2.5 text-sm focus:outline-none focus:border-brand-orange transition-colors"
+                />
+                {dobError && <p className="text-[11px] text-red-400">{dobError[0]}</p>}
+              </div>
+
+              {/* Remove */}
+              <div className="shrink-0 flex items-end pb-0.5 sm:pt-6">
+                <button
+                  type="button"
+                  onClick={() => onRemovePlayer(categoryKey, idx)}
+                  disabled={players.length <= 1}
+                  title="Remove player"
+                  className="w-8 h-8 flex items-center justify-center text-brand-blue/50 hover:text-red-400 hover:bg-red-950/40 border border-transparent hover:border-red-900/50 transition-all disabled:opacity-20 disabled:cursor-not-allowed"
+                >
+                  <Trash2 size={15} />
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── Add Player / Complete Footer ── */}
+      <div className="p-4 bg-brand-dark/60 border-t border-brand-blue/30">
+        {!isComplete ? (
+          <button
+            type="button"
+            onClick={() => onAddPlayer(categoryKey)}
+            className="w-full flex items-center justify-center gap-3 py-3.5 bg-brand-blue/10 border-2 border-dashed border-brand-blue/50 text-brand-cream/70 hover:bg-brand-orange/10 hover:border-brand-orange hover:text-brand-orange transition-all duration-200 group"
+          >
+            <div className="w-6 h-6 bg-brand-blue/30 group-hover:bg-brand-orange/30 flex items-center justify-center transition-colors">
+              <Plus size={16} className="group-hover:scale-110 transition-transform" />
+            </div>
+            <span className="font-display text-lg tracking-wider uppercase">
+              Add Player {count + 1}
+            </span>
+            <span className="text-xs text-brand-cream/40 group-hover:text-brand-orange/60 font-mono">
+              ({10 - count} remaining)
+            </span>
+          </button>
+        ) : (
+          <div className="flex items-center justify-center gap-3 py-3.5 bg-green-900/20 border-2 border-green-600/40 text-green-400">
+            <div className="w-6 h-6 bg-green-900/50 flex items-center justify-center">
+              <Check size={16} />
+            </div>
+            <span className="font-display text-lg tracking-wider uppercase">
+              Roster Complete — 10 / 10 Players
+            </span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Form Component ─────────────────────────────────────────────────────
 
 export default function TrialRegistrationForm() {
   const [formData, setFormData] = useState<FormState>(initialFormState);
@@ -166,6 +365,26 @@ export default function TrialRegistrationForm() {
     });
   };
 
+  const handleAddPlayer = (
+    categoryKey: "u10BoysPlayers" | "u10GirlsPlayers" | "u12BoysPlayers" | "u12GirlsPlayers"
+  ) => {
+    setFormData((prev) => {
+      if (prev[categoryKey].length >= 10) return prev;
+      return { ...prev, [categoryKey]: [...prev[categoryKey], createEmptyPlayer()] };
+    });
+  };
+
+  const handleRemovePlayer = (
+    categoryKey: "u10BoysPlayers" | "u10GirlsPlayers" | "u12BoysPlayers" | "u12GirlsPlayers",
+    index: number
+  ) => {
+    setFormData((prev) => {
+      if (prev[categoryKey].length <= 1) return prev;
+      const players = prev[categoryKey].filter((_, i) => i !== index);
+      return { ...prev, [categoryKey]: players };
+    });
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setFieldErrors({});
@@ -197,9 +416,9 @@ export default function TrialRegistrationForm() {
           totalPlayers: registeredCategories.length * 10,
           totalFee: finalFee,
         });
-      } catch (error) {
-        if (error instanceof ZodError) {
-          const errors = error.flatten().fieldErrors;
+      } catch (err: unknown) {
+        if (err instanceof ZodError) {
+          const errors = err.flatten().fieldErrors;
           setFieldErrors(errors as Record<string, string[]>);
           setGeneralError("Please resolve the highlighted validation errors before submitting.");
         } else {
@@ -804,296 +1023,64 @@ export default function TrialRegistrationForm() {
                 <span className="text-xs text-brand-cream/60 uppercase font-semibold">Step 4 of 4</span>
               </div>
 
-              {/* U10 BOYS ROSTER (10 PLAYERS) */}
+              {/* U10 BOYS ROSTER */}
               {formData.registerU10Boys && (
-                <div className="p-6 bg-brand-dark/90 border-2 border-brand-orange space-y-4">
-                  <div className="flex items-center justify-between border-b border-brand-orange/40 pb-3">
-                    <div>
-                      <h4 className="font-display text-2xl text-brand-orange uppercase font-bold">
-                        🏀 U10 Boys Team Roster (10 Players)
-                      </h4>
-                      <p className="text-xs text-brand-yellow font-medium">
-                        Eligibility: Born on or after 01-01-2017
-                      </p>
-                    </div>
-                    <span className="font-display text-lg text-brand-cream bg-brand-blue/30 px-3 py-1">
-                      10 Players
-                    </span>
-                  </div>
-
-                  {fieldErrors.u10BoysPlayers && (
-                    <p className="text-xs text-red-400 font-medium">{fieldErrors.u10BoysPlayers[0]}</p>
-                  )}
-
-                  <div className="space-y-3">
-                    {formData.u10BoysPlayers.map((player, idx) => {
-                      const isEligible = checkDobEligibility(player.dob, "2017-01-01");
-                      const nameError = fieldErrors[`u10BoysPlayers_${idx}_name`];
-                      const dobError = fieldErrors[`u10BoysPlayers_${idx}_dob`];
-
-                      return (
-                        <div key={idx} className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-start bg-brand-blue/10 p-3.5 border border-brand-blue/30">
-                          <div className="sm:col-span-1 font-display text-lg text-brand-orange pt-2 text-center">
-                            #{idx + 1}
-                          </div>
-
-                          <div className="sm:col-span-6 space-y-1">
-                            <label className="text-xs font-semibold text-brand-cream/80 uppercase">
-                              Player {idx + 1} Full Name <span className="text-brand-orange">*</span>
-                            </label>
-                            <input
-                              type="text"
-                              value={player.name}
-                              onChange={(e) => handlePlayerChange("u10BoysPlayers", idx, "name", e.target.value)}
-                              placeholder={`Full Name of Player ${idx + 1}`}
-                              className="w-full bg-brand-dark border border-brand-blue/50 text-brand-cream px-3 py-2 text-sm focus:outline-none focus:border-brand-orange"
-                            />
-                            {nameError && <p className="text-xs text-red-400">{nameError[0]}</p>}
-                          </div>
-
-                          <div className="sm:col-span-5 space-y-1">
-                            <div className="flex justify-between items-center">
-                              <label className="text-xs font-semibold text-brand-cream/80 uppercase">
-                                Date of Birth <span className="text-brand-orange">*</span>
-                              </label>
-                              {player.dob && !isEligible && (
-                                <span className="text-[10px] text-red-400 font-bold bg-red-950 px-1.5 py-0.5">
-                                  Must be on/after 01-01-2017
-                                </span>
-                              )}
-                            </div>
-                            <input
-                              type="date"
-                              value={player.dob}
-                              onChange={(e) => handlePlayerChange("u10BoysPlayers", idx, "dob", e.target.value)}
-                              className="w-full bg-brand-dark border border-brand-blue/50 text-brand-cream px-3 py-2 text-sm focus:outline-none focus:border-brand-orange"
-                            />
-                            {dobError && <p className="text-xs text-red-400">{dobError[0]}</p>}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
+                <PlayerRosterSection
+                  title="U10 Boys Team Roster"
+                  eligibility="Born on or after 01-01-2017"
+                  cutoffDate="2017-01-01"
+                  categoryKey="u10BoysPlayers"
+                  players={formData.u10BoysPlayers}
+                  fieldErrors={fieldErrors}
+                  onPlayerChange={handlePlayerChange}
+                  onAddPlayer={handleAddPlayer}
+                  onRemovePlayer={handleRemovePlayer}
+                />
               )}
 
-              {/* U10 GIRLS ROSTER (10 PLAYERS) */}
+              {/* U10 GIRLS ROSTER */}
               {formData.registerU10Girls && (
-                <div className="p-6 bg-brand-dark/90 border-2 border-brand-orange space-y-4">
-                  <div className="flex items-center justify-between border-b border-brand-orange/40 pb-3">
-                    <div>
-                      <h4 className="font-display text-2xl text-brand-orange uppercase font-bold">
-                        🏀 U10 Girls Team Roster (10 Players)
-                      </h4>
-                      <p className="text-xs text-brand-yellow font-medium">
-                        Eligibility: Born on or after 01-01-2017
-                      </p>
-                    </div>
-                    <span className="font-display text-lg text-brand-cream bg-brand-blue/30 px-3 py-1">
-                      10 Players
-                    </span>
-                  </div>
-
-                  {fieldErrors.u10GirlsPlayers && (
-                    <p className="text-xs text-red-400 font-medium">{fieldErrors.u10GirlsPlayers[0]}</p>
-                  )}
-
-                  <div className="space-y-3">
-                    {formData.u10GirlsPlayers.map((player, idx) => {
-                      const isEligible = checkDobEligibility(player.dob, "2017-01-01");
-                      const nameError = fieldErrors[`u10GirlsPlayers_${idx}_name`];
-                      const dobError = fieldErrors[`u10GirlsPlayers_${idx}_dob`];
-
-                      return (
-                        <div key={idx} className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-start bg-brand-blue/10 p-3.5 border border-brand-blue/30">
-                          <div className="sm:col-span-1 font-display text-lg text-brand-orange pt-2 text-center">
-                            #{idx + 1}
-                          </div>
-
-                          <div className="sm:col-span-6 space-y-1">
-                            <label className="text-xs font-semibold text-brand-cream/80 uppercase">
-                              Player {idx + 1} Full Name <span className="text-brand-orange">*</span>
-                            </label>
-                            <input
-                              type="text"
-                              value={player.name}
-                              onChange={(e) => handlePlayerChange("u10GirlsPlayers", idx, "name", e.target.value)}
-                              placeholder={`Full Name of Player ${idx + 1}`}
-                              className="w-full bg-brand-dark border border-brand-blue/50 text-brand-cream px-3 py-2 text-sm focus:outline-none focus:border-brand-orange"
-                            />
-                            {nameError && <p className="text-xs text-red-400">{nameError[0]}</p>}
-                          </div>
-
-                          <div className="sm:col-span-5 space-y-1">
-                            <div className="flex justify-between items-center">
-                              <label className="text-xs font-semibold text-brand-cream/80 uppercase">
-                                Date of Birth <span className="text-brand-orange">*</span>
-                              </label>
-                              {player.dob && !isEligible && (
-                                <span className="text-[10px] text-red-400 font-bold bg-red-950 px-1.5 py-0.5">
-                                  Must be on/after 01-01-2017
-                                </span>
-                              )}
-                            </div>
-                            <input
-                              type="date"
-                              value={player.dob}
-                              onChange={(e) => handlePlayerChange("u10GirlsPlayers", idx, "dob", e.target.value)}
-                              className="w-full bg-brand-dark border border-brand-blue/50 text-brand-cream px-3 py-2 text-sm focus:outline-none focus:border-brand-orange"
-                            />
-                            {dobError && <p className="text-xs text-red-400">{dobError[0]}</p>}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
+                <PlayerRosterSection
+                  title="U10 Girls Team Roster"
+                  eligibility="Born on or after 01-01-2017"
+                  cutoffDate="2017-01-01"
+                  categoryKey="u10GirlsPlayers"
+                  players={formData.u10GirlsPlayers}
+                  fieldErrors={fieldErrors}
+                  onPlayerChange={handlePlayerChange}
+                  onAddPlayer={handleAddPlayer}
+                  onRemovePlayer={handleRemovePlayer}
+                />
               )}
 
-              {/* U12 BOYS ROSTER (10 PLAYERS) */}
+              {/* U12 BOYS ROSTER */}
               {formData.registerU12Boys && (
-                <div className="p-6 bg-brand-dark/90 border-2 border-brand-orange space-y-4">
-                  <div className="flex items-center justify-between border-b border-brand-orange/40 pb-3">
-                    <div>
-                      <h4 className="font-display text-2xl text-brand-orange uppercase font-bold">
-                        🏀 U12 Boys Team Roster (10 Players)
-                      </h4>
-                      <p className="text-xs text-brand-yellow font-medium">
-                        Eligibility: Born on or after 01-01-2015
-                      </p>
-                    </div>
-                    <span className="font-display text-lg text-brand-cream bg-brand-blue/30 px-3 py-1">
-                      10 Players
-                    </span>
-                  </div>
-
-                  {fieldErrors.u12BoysPlayers && (
-                    <p className="text-xs text-red-400 font-medium">{fieldErrors.u12BoysPlayers[0]}</p>
-                  )}
-
-                  <div className="space-y-3">
-                    {formData.u12BoysPlayers.map((player, idx) => {
-                      const isEligible = checkDobEligibility(player.dob, "2015-01-01");
-                      const nameError = fieldErrors[`u12BoysPlayers_${idx}_name`];
-                      const dobError = fieldErrors[`u12BoysPlayers_${idx}_dob`];
-
-                      return (
-                        <div key={idx} className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-start bg-brand-blue/10 p-3.5 border border-brand-blue/30">
-                          <div className="sm:col-span-1 font-display text-lg text-brand-orange pt-2 text-center">
-                            #{idx + 1}
-                          </div>
-
-                          <div className="sm:col-span-6 space-y-1">
-                            <label className="text-xs font-semibold text-brand-cream/80 uppercase">
-                              Player {idx + 1} Full Name <span className="text-brand-orange">*</span>
-                            </label>
-                            <input
-                              type="text"
-                              value={player.name}
-                              onChange={(e) => handlePlayerChange("u12BoysPlayers", idx, "name", e.target.value)}
-                              placeholder={`Full Name of Player ${idx + 1}`}
-                              className="w-full bg-brand-dark border border-brand-blue/50 text-brand-cream px-3 py-2 text-sm focus:outline-none focus:border-brand-orange"
-                            />
-                            {nameError && <p className="text-xs text-red-400">{nameError[0]}</p>}
-                          </div>
-
-                          <div className="sm:col-span-5 space-y-1">
-                            <div className="flex justify-between items-center">
-                              <label className="text-xs font-semibold text-brand-cream/80 uppercase">
-                                Date of Birth <span className="text-brand-orange">*</span>
-                              </label>
-                              {player.dob && !isEligible && (
-                                <span className="text-[10px] text-red-400 font-bold bg-red-950 px-1.5 py-0.5">
-                                  Must be on/after 01-01-2015
-                                </span>
-                              )}
-                            </div>
-                            <input
-                              type="date"
-                              value={player.dob}
-                              onChange={(e) => handlePlayerChange("u12BoysPlayers", idx, "dob", e.target.value)}
-                              className="w-full bg-brand-dark border border-brand-blue/50 text-brand-cream px-3 py-2 text-sm focus:outline-none focus:border-brand-orange"
-                            />
-                            {dobError && <p className="text-xs text-red-400">{dobError[0]}</p>}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
+                <PlayerRosterSection
+                  title="U12 Boys Team Roster"
+                  eligibility="Born on or after 01-01-2015"
+                  cutoffDate="2015-01-01"
+                  categoryKey="u12BoysPlayers"
+                  players={formData.u12BoysPlayers}
+                  fieldErrors={fieldErrors}
+                  onPlayerChange={handlePlayerChange}
+                  onAddPlayer={handleAddPlayer}
+                  onRemovePlayer={handleRemovePlayer}
+                />
               )}
 
-              {/* U12 GIRLS ROSTER (10 PLAYERS) */}
+              {/* U12 GIRLS ROSTER */}
               {formData.registerU12Girls && (
-                <div className="p-6 bg-brand-dark/90 border-2 border-brand-orange space-y-4">
-                  <div className="flex items-center justify-between border-b border-brand-orange/40 pb-3">
-                    <div>
-                      <h4 className="font-display text-2xl text-brand-orange uppercase font-bold">
-                        🏀 U12 Girls Team Roster (10 Players)
-                      </h4>
-                      <p className="text-xs text-brand-yellow font-medium">
-                        Eligibility: Born on or after 01-01-2015
-                      </p>
-                    </div>
-                    <span className="font-display text-lg text-brand-cream bg-brand-blue/30 px-3 py-1">
-                      10 Players
-                    </span>
-                  </div>
-
-                  {fieldErrors.u12GirlsPlayers && (
-                    <p className="text-xs text-red-400 font-medium">{fieldErrors.u12GirlsPlayers[0]}</p>
-                  )}
-
-                  <div className="space-y-3">
-                    {formData.u12GirlsPlayers.map((player, idx) => {
-                      const isEligible = checkDobEligibility(player.dob, "2015-01-01");
-                      const nameError = fieldErrors[`u12GirlsPlayers_${idx}_name`];
-                      const dobError = fieldErrors[`u12GirlsPlayers_${idx}_dob`];
-
-                      return (
-                        <div key={idx} className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-start bg-brand-blue/10 p-3.5 border border-brand-blue/30">
-                          <div className="sm:col-span-1 font-display text-lg text-brand-orange pt-2 text-center">
-                            #{idx + 1}
-                          </div>
-
-                          <div className="sm:col-span-6 space-y-1">
-                            <label className="text-xs font-semibold text-brand-cream/80 uppercase">
-                              Player {idx + 1} Full Name <span className="text-brand-orange">*</span>
-                            </label>
-                            <input
-                              type="text"
-                              value={player.name}
-                              onChange={(e) => handlePlayerChange("u12GirlsPlayers", idx, "name", e.target.value)}
-                              placeholder={`Full Name of Player ${idx + 1}`}
-                              className="w-full bg-brand-dark border border-brand-blue/50 text-brand-cream px-3 py-2 text-sm focus:outline-none focus:border-brand-orange"
-                            />
-                            {nameError && <p className="text-xs text-red-400">{nameError[0]}</p>}
-                          </div>
-
-                          <div className="sm:col-span-5 space-y-1">
-                            <div className="flex justify-between items-center">
-                              <label className="text-xs font-semibold text-brand-cream/80 uppercase">
-                                Date of Birth <span className="text-brand-orange">*</span>
-                              </label>
-                              {player.dob && !isEligible && (
-                                <span className="text-[10px] text-red-400 font-bold bg-red-950 px-1.5 py-0.5">
-                                  Must be on/after 01-01-2015
-                                </span>
-                              )}
-                            </div>
-                            <input
-                              type="date"
-                              value={player.dob}
-                              onChange={(e) => handlePlayerChange("u12GirlsPlayers", idx, "dob", e.target.value)}
-                              className="w-full bg-brand-dark border border-brand-blue/50 text-brand-cream px-3 py-2 text-sm focus:outline-none focus:border-brand-orange"
-                            />
-                            {dobError && <p className="text-xs text-red-400">{dobError[0]}</p>}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
+                <PlayerRosterSection
+                  title="U12 Girls Team Roster"
+                  eligibility="Born on or after 01-01-2015"
+                  cutoffDate="2015-01-01"
+                  categoryKey="u12GirlsPlayers"
+                  players={formData.u12GirlsPlayers}
+                  fieldErrors={fieldErrors}
+                  onPlayerChange={handlePlayerChange}
+                  onAddPlayer={handleAddPlayer}
+                  onRemovePlayer={handleRemovePlayer}
+                />
               )}
             </div>
 

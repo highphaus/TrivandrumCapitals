@@ -70,7 +70,7 @@ export default function TrialStatusBar() {
           {/* Action CTA */}
           <div className="shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-brand-blue/30 flex justify-end">
             <Link
-              href="#register-form"
+              href="/register"
               className="w-full sm:w-auto btn-yellow text-base py-2.5 px-6 flex items-center justify-center gap-2"
               id="status-bar-cta"
             >

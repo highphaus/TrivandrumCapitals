@@ -77,10 +77,10 @@ export default function Header() {
               The Club
             </Link>
             <Link
-              href="#trials"
+              href="/register"
               className="font-display text-lg tracking-wider text-brand-cream hover:text-brand-yellow transition-colors uppercase py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-orange hover:after:w-full after:transition-all"
             >
-              Trials
+              Register
             </Link>
             <Link
               href="#contact"
@@ -93,11 +93,11 @@ export default function Header() {
           {/* Action CTA & Mobile Toggle */}
           <div className="flex items-center gap-4">
             <Link
-              href="#register-form"
+              href="/register"
               className="hidden sm:inline-flex btn-primary text-base py-2.5 px-6"
               id="header-cta"
             >
-              JOIN TRIALS
+              REGISTER NOW
             </Link>
 
             {/* Mobile Hamburger Button */}
@@ -134,11 +134,11 @@ export default function Header() {
               THE CLUB <ChevronRight size={20} className="text-brand-orange" />
             </Link>
             <Link
-              href="#trials"
+              href="/register"
               onClick={() => setMobileMenuOpen(false)}
               className="font-display text-2xl tracking-wider text-brand-cream hover:text-brand-orange flex items-center justify-between border-b border-brand-blue/30 pb-2"
             >
-              TRIALS <ChevronRight size={20} className="text-brand-orange" />
+              REGISTER <ChevronRight size={20} className="text-brand-orange" />
             </Link>
             <Link
               href="#contact"
@@ -150,11 +150,11 @@ export default function Header() {
           </nav>
 
           <Link
-            href="#register-form"
+            href="/register"
             onClick={() => setMobileMenuOpen(false)}
             className="w-full btn-primary py-3 text-center block mt-4"
           >
-            JOIN TRIALS
+            REGISTER NOW
           </Link>
         </div>
       )}
