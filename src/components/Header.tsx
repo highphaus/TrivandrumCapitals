@@ -94,7 +94,7 @@ export default function Header() {
           <div className="flex items-center gap-4">
             <Link
               href="/register"
-              className="inline-flex btn-primary text-[10px] sm:text-sm md:text-base py-1 px-2.5 sm:py-2 sm:px-4 md:py-2.5 md:px-6 leading-tight"
+              className="inline-flex btn-primary text-[10px] sm:text-sm md:text-base py-1 px-2.5 sm:py-2 sm:px-4 md:py-2.5 md:px-6 leading-tight shadow-[0_0_14px_rgba(232,65,3,0.7)] hover:shadow-[0_0_22px_rgba(232,65,3,0.95)] animate-pulse ring-1 ring-brand-orange ring-offset-1 ring-offset-brand-dark transition-shadow duration-300"
               id="header-cta"
             >
               <span className="sm:hidden">REG</span>
