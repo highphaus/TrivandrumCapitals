@@ -20,7 +20,7 @@ export default function ClubSection() {
               </span>
             </div>
 
-            <h2 className="font-display text-4xl sm:text-6xl text-brand-cream font-bold leading-none uppercase">
+            <h2 className="font-display text-3xl sm:text-5xl lg:text-6xl text-brand-cream font-bold leading-none uppercase">
               BUILT FOR <br />
               <span className="text-brand-orange">THE CAPITAL.</span>
             </h2>
@@ -54,7 +54,7 @@ export default function ClubSection() {
               {clubConfig.principles.map((principle, index) => (
                 <div
                   key={index}
-                  className="group p-6 sm:p-8 bg-brand-dark/90 border-2 border-brand-blue/30 hover:border-brand-orange transition-all duration-300 relative"
+                  className="group p-4 sm:p-6 bg-brand-dark/90 border-2 border-brand-blue/30 hover:border-brand-orange transition-all duration-300 relative"
                 >
                   {/* Angle Accent on Hover */}
                   <div className="absolute top-0 left-0 w-2 h-full bg-brand-blue group-hover:bg-brand-orange transition-colors" />
@@ -65,7 +65,7 @@ export default function ClubSection() {
                         <span className="font-display text-3xl font-bold text-brand-orange">
                           {principle.number}
                         </span>
-                        <h4 className="font-display text-3xl text-brand-cream tracking-wide uppercase group-hover:text-brand-yellow transition-colors">
+                        <h4 className="font-display text-xl sm:text-3xl text-brand-cream tracking-wide uppercase group-hover:text-brand-yellow transition-colors">
                           {principle.title}
                         </h4>
                       </div>

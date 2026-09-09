@@ -94,7 +94,7 @@ export default function Header() {
           <div className="flex items-center gap-4">
             <Link
               href="/register"
-              className="hidden sm:inline-flex btn-primary text-base py-2.5 px-6"
+              className="hidden sm:inline-flex btn-primary text-xs sm:text-base py-1.5 sm:py-2.5 px-3 sm:px-6"
               id="header-cta"
             >
               REGISTER NOW

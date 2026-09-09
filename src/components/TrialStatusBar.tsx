@@ -17,7 +17,7 @@ export default function TrialStatusBar() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           
           {/* Status Items Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-8 flex-1">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-8 flex-1">
             
             {/* Item 1: Registration Status */}
             <div className="flex items-center gap-3">

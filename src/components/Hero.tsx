@@ -10,7 +10,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen pt-28 pb-16 lg:pt-36 lg:pb-24 flex items-center justify-center overflow-hidden bg-brand-dark court-overlay"
+      className="relative min-h-screen pt-24 pb-12 sm:pt-28 sm:pb-16 lg:pt-36 lg:pb-24 flex items-center justify-center overflow-hidden bg-brand-dark court-overlay"
     >
       {/* Background Action Visual */}
       <div className="absolute inset-0 z-0">
@@ -42,13 +42,13 @@ export default function Hero() {
         <div className="max-w-3xl">
 
           {/* Label badge — blue bg, orange left border, yellow dot */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-blue/25 border-l-4 border-brand-orange text-brand-cream text-xs sm:text-sm uppercase tracking-widest font-semibold mb-7 shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-4 sm:py-1.5 bg-brand-blue/25 border-l-4 border-brand-orange text-brand-cream text-[10px] sm:text-xs uppercase tracking-widest font-semibold mb-5 sm:mb-7 shadow-sm">
             <span className="w-2 h-2 rounded-full bg-brand-yellow animate-pulse" />
             {clubConfig.heroLabel}
           </div>
 
           {/* Headline — cream base, orange→yellow gradient accent */}
-          <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tight text-brand-cream leading-[0.9] uppercase mb-6 drop-shadow-md">
+          <h1 className="font-display text-4xl xs:text-5xl sm:text-6xl lg:text-8xl font-bold tracking-tight text-brand-cream leading-[0.9] uppercase mb-4 sm:mb-6 drop-shadow-md">
             THE CAPITAL <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange via-brand-yellow to-brand-orange">
               RISES.
@@ -56,7 +56,7 @@ export default function Hero() {
           </h1>
 
           {/* Subtext — cream/90, blue left rule */}
-          <p className="text-lg sm:text-xl text-brand-cream/85 font-normal leading-relaxed mb-8 max-w-2xl border-l-2 border-brand-blue pl-4">
+          <p className="text-sm sm:text-lg text-brand-cream/85 font-normal leading-relaxed mb-6 sm:mb-8 max-w-2xl border-l-2 border-brand-blue pl-3 sm:pl-4">
             {clubConfig.heroSubtext}
           </p>
 
@@ -72,20 +72,18 @@ export default function Hero() {
           </div>
 
           {/* Stats bar */}
-          <div className="mt-12 pt-8 border-t border-brand-blue/30 grid grid-cols-3 gap-4 sm:gap-8 max-w-lg">
+          <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-brand-blue/30 grid grid-cols-3 gap-3 sm:gap-8 max-w-lg">
             <div className="flex flex-col">
-              {/* Yellow for city — the most prominent non-CTA highlight */}
-              <span className="font-display text-xl sm:text-2xl text-brand-yellow tracking-wider">TRIVANDRUM</span>
-              <span className="text-xs text-brand-cream/60 uppercase tracking-widest font-medium mt-0.5">Home City</span>
+              <span className="font-display text-sm sm:text-xl text-brand-yellow tracking-wider">TRIVANDRUM</span>
+              <span className="text-[9px] sm:text-xs text-brand-cream/60 uppercase tracking-widest font-medium mt-0.5">Home City</span>
             </div>
-            <div className="flex flex-col border-l border-brand-blue/40 pl-4">
-              {/* Orange for action labels */}
-              <span className="font-display text-xl sm:text-2xl text-brand-orange">YOUTH & SR</span>
-              <span className="text-xs text-brand-cream/60 uppercase tracking-widest font-medium mt-0.5">Trial Rosters</span>
+            <div className="flex flex-col border-l border-brand-blue/40 pl-2 sm:pl-4">
+              <span className="font-display text-sm sm:text-xl text-brand-orange">YOUTH &amp; SR</span>
+              <span className="text-[9px] sm:text-xs text-brand-cream/60 uppercase tracking-widest font-medium mt-0.5">Trial Rosters</span>
             </div>
-            <div className="flex flex-col border-l border-brand-blue/40 pl-4">
-              <span className="font-display text-xl sm:text-2xl text-brand-cream">2026</span>
-              <span className="text-xs text-brand-cream/60 uppercase tracking-widest font-medium mt-0.5">Season</span>
+            <div className="flex flex-col border-l border-brand-blue/40 pl-2 sm:pl-4">
+              <span className="font-display text-sm sm:text-xl text-brand-cream">2026</span>
+              <span className="text-[9px] sm:text-xs text-brand-cream/60 uppercase tracking-widest font-medium mt-0.5">Season</span>
             </div>
           </div>
         </div>

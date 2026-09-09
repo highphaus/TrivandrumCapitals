@@ -21,7 +21,7 @@ export default function RecruitmentFeature() {
           
           {/* Left Column: Image with Court Framing */}
           <div className="lg:col-span-6 relative">
-            <div className="relative h-[400px] sm:h-[480px] w-full border-4 border-brand-blue/40 p-2 bg-brand-dark">
+            <div className="relative h-[280px] sm:h-[400px] lg:h-[480px] w-full border-4 border-brand-blue/40 p-2 bg-brand-dark">
               <div className="relative h-full w-full overflow-hidden">
                 <Image
                   src="/images/recruitment-action.jpg"
@@ -56,7 +56,7 @@ export default function RecruitmentFeature() {
                 </span>
               </div>
 
-              <h2 className="font-display text-4xl sm:text-6xl text-brand-cream font-bold leading-none uppercase">
+              <h2 className="font-display text-3xl sm:text-5xl lg:text-6xl text-brand-cream font-bold leading-none uppercase">
                 YOUR COURT. <br />
                 <span className="text-brand-orange">YOUR MOMENT.</span>
               </h2>
