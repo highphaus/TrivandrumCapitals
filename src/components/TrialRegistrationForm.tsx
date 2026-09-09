@@ -130,28 +130,29 @@ function PlayerRosterSection({
   const count = players.length;
   const isComplete = count === 10;
   const progressPct = (count / 10) * 100;
+  const categoryError = fieldErrors[categoryKey];
 
   return (
-    <div className="border-2 border-brand-blue/40 overflow-hidden">
+    <div className={`border-2 overflow-hidden transition-colors ${categoryError ? "border-red-500/80" : "border-brand-blue/40"}`}>
 
       {/* ── Header Strip ── */}
-      <div className="bg-brand-blue/20 px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-brand-blue/40">
+      <div className="bg-brand-blue/20 px-3.5 sm:px-5 py-3 sm:py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 border-b-2 border-brand-blue/40">
         <div>
-          <h4 className="font-display text-2xl text-brand-yellow uppercase tracking-wide">
-            🏀 {title}
+          <h4 className="font-display text-lg sm:text-2xl text-brand-yellow uppercase tracking-wide flex items-center gap-2">
+            <span>🏀</span> {title}
           </h4>
-          <p className="text-xs text-brand-cream/70 font-medium mt-0.5">
+          <p className="text-xs sm:text-sm text-brand-cream/70 font-medium mt-0.5">
             Eligibility cut-off: <span className="text-brand-orange font-bold">{eligibility}</span>
           </p>
         </div>
 
         {/* Progress pill */}
-        <div className={`flex items-center gap-2 px-4 py-2 border text-sm font-display tracking-widest shrink-0 ${
+        <div className={`inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 border text-xs sm:text-sm font-display tracking-wider shrink-0 self-start sm:self-auto ${
           isComplete
-            ? "border-green-500/60 bg-green-900/30 text-green-400"
+            ? "border-green-500/60 bg-green-900/30 text-green-400 font-bold"
             : "border-brand-yellow/50 bg-brand-yellow/10 text-brand-yellow"
         }`}>
-          {isComplete ? <Check size={15} /> : <Users size={15} />}
+          {isComplete ? <Check size={14} /> : <Users size={14} />}
           {count} / 10 PLAYERS
         </div>
       </div>
@@ -159,13 +160,13 @@ function PlayerRosterSection({
       {/* ── Progress Bar ── */}
       <div className="h-1.5 w-full bg-brand-dark">
         <div
-          className={`h-full transition-all duration-500 ${isComplete ? "bg-green-500" : "bg-brand-orange"}`}
+          className={`h-full transition-all duration-300 ${isComplete ? "bg-green-500" : "bg-brand-orange"}`}
           style={{ width: `${progressPct}%` }}
         />
       </div>
 
       {/* ── Step Dots ── */}
-      <div className="px-5 pt-4 pb-2 flex items-center gap-1.5 flex-wrap">
+      <div className="px-3.5 sm:px-5 pt-3 pb-2 flex items-center gap-1.5 flex-wrap">
         {Array.from({ length: 10 }).map((_, i) => (
           <div
             key={i}
@@ -178,13 +179,16 @@ function PlayerRosterSection({
             {i + 1}
           </div>
         ))}
-        <span className="text-xs text-brand-cream/50 ml-2">
-          {isComplete ? "✅ Roster complete!" : `${10 - count} more needed`}
+        <span className="text-xs text-brand-cream/60 ml-2 font-medium">
+          {isComplete ? "✅ Roster complete!" : `${10 - count} more required`}
         </span>
       </div>
 
-      {fieldErrors[categoryKey] && (
-        <p className="px-5 pb-2 text-xs text-red-400 font-medium">{fieldErrors[categoryKey][0]}</p>
+      {categoryError && (
+        <div className="mx-3.5 sm:mx-5 my-2 p-2.5 bg-red-950/60 border border-red-500 text-xs text-red-300 flex items-center gap-2">
+          <AlertTriangle size={15} className="text-red-400 shrink-0" />
+          <span>{categoryError[0]}</span>
+        </div>
       )}
 
       {/* ── Player Rows ── */}
@@ -206,19 +210,20 @@ function PlayerRosterSection({
                   <div className="w-6 h-6 bg-brand-orange flex items-center justify-center font-display text-brand-cream text-xs font-bold shrink-0">
                     {idx + 1}
                   </div>
-                  <span className="text-xs text-brand-cream/70 font-semibold uppercase tracking-wider">
+                  <span className="text-xs text-brand-cream/80 font-semibold uppercase tracking-wider">
                     Player {idx + 1}
                   </span>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => onRemovePlayer(categoryKey, idx)}
-                  disabled={players.length <= 1}
-                  title="Remove player"
-                  className="w-7 h-7 flex items-center justify-center text-brand-cream/50 hover:text-red-400 hover:bg-red-950/40 border border-brand-blue/30 hover:border-red-900/50 transition-all disabled:opacity-20 disabled:cursor-not-allowed"
-                >
-                  <Trash2 size={14} />
-                </button>
+                {players.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => onRemovePlayer(categoryKey, idx)}
+                    title="Remove player"
+                    className="w-7 h-7 flex items-center justify-center text-brand-cream/50 hover:text-red-400 hover:bg-red-950/40 border border-brand-blue/30 hover:border-red-900/50 transition-all"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                )}
               </div>
 
               {/* Desktop Number Badge (sm+) */}
@@ -228,7 +233,7 @@ function PlayerRosterSection({
 
               {/* Name */}
               <div className="flex-1 space-y-1 min-w-0 w-full">
-                <label className="block text-[11px] font-semibold text-brand-cream/60 uppercase tracking-wider">
+                <label className="block text-[11px] font-semibold text-brand-cream/70 uppercase tracking-wider">
                   Full Name <span className="text-brand-orange">*</span>
                 </label>
                 <input
@@ -236,15 +241,21 @@ function PlayerRosterSection({
                   value={player.name}
                   onChange={(e) => onPlayerChange(categoryKey, idx, "name", e.target.value)}
                   placeholder={`Player ${idx + 1} full name`}
-                  className="w-full bg-brand-dark/80 border border-brand-blue/40 hover:border-brand-blue text-brand-cream placeholder-brand-cream/25 px-3 py-2.5 text-base sm:text-sm focus:outline-none focus:border-brand-orange transition-colors min-h-[44px]"
+                  className={`w-full bg-brand-dark/80 border text-brand-cream placeholder-brand-cream/25 px-3 py-2 sm:py-2.5 text-base sm:text-sm focus:outline-none transition-colors min-h-[42px] ${
+                    nameError ? "border-red-500 bg-red-950/10 focus:border-red-400" : "border-brand-blue/40 hover:border-brand-blue focus:border-brand-orange"
+                  }`}
                 />
-                {nameError && <p className="text-[11px] text-red-400">{nameError[0]}</p>}
+                {nameError && (
+                  <p className="text-[11px] text-red-400 font-medium flex items-center gap-1 mt-0.5">
+                    <AlertTriangle size={12} className="shrink-0" /> {nameError[0]}
+                  </p>
+                )}
               </div>
 
               {/* DOB */}
               <div className="w-full sm:w-48 space-y-1 shrink-0">
                 <div className="flex items-center justify-between gap-2">
-                  <label className="block text-[11px] font-semibold text-brand-cream/60 uppercase tracking-wider">
+                  <label className="block text-[11px] font-semibold text-brand-cream/70 uppercase tracking-wider">
                     Date of Birth <span className="text-brand-orange">*</span>
                   </label>
                   {hasValidDob && (
@@ -261,9 +272,15 @@ function PlayerRosterSection({
                   type="date"
                   value={player.dob}
                   onChange={(e) => onPlayerChange(categoryKey, idx, "dob", e.target.value)}
-                  className="w-full bg-brand-dark/80 border border-brand-blue/40 hover:border-brand-blue text-brand-cream px-3 py-2.5 text-base sm:text-sm focus:outline-none focus:border-brand-orange transition-colors min-h-[44px]"
+                  className={`w-full bg-brand-dark/80 border text-brand-cream px-3 py-2 sm:py-2.5 text-base sm:text-sm focus:outline-none transition-colors min-h-[42px] ${
+                    dobError ? "border-red-500 bg-red-950/10 focus:border-red-400" : "border-brand-blue/40 hover:border-brand-blue focus:border-brand-orange"
+                  }`}
                 />
-                {dobError && <p className="text-[11px] text-red-400">{dobError[0]}</p>}
+                {dobError && (
+                  <p className="text-[11px] text-red-400 font-medium flex items-center gap-1 mt-0.5">
+                    <AlertTriangle size={12} className="shrink-0" /> {dobError[0]}
+                  </p>
+                )}
               </div>
 
               {/* Remove button on Desktop (sm+) */}
@@ -284,29 +301,29 @@ function PlayerRosterSection({
       </div>
 
       {/* ── Add Player / Complete Footer ── */}
-      <div className="p-4 bg-brand-dark/60 border-t border-brand-blue/30">
+      <div className="p-3 sm:p-4 bg-brand-dark/60 border-t border-brand-blue/30">
         {!isComplete ? (
           <button
             type="button"
             onClick={() => onAddPlayer(categoryKey)}
-            className="w-full flex items-center justify-center gap-3 py-3.5 bg-brand-blue/10 border-2 border-dashed border-brand-blue/50 text-brand-cream/70 hover:bg-brand-orange/10 hover:border-brand-orange hover:text-brand-orange transition-all duration-200 group"
+            className="w-full flex items-center justify-center gap-2.5 sm:gap-3 py-3 sm:py-3.5 bg-brand-blue/10 border-2 border-dashed border-brand-blue/50 text-brand-cream/80 hover:bg-brand-orange/10 hover:border-brand-orange hover:text-brand-orange transition-all duration-200 min-h-[46px] group"
           >
             <div className="w-6 h-6 bg-brand-blue/30 group-hover:bg-brand-orange/30 flex items-center justify-center transition-colors">
               <Plus size={16} className="group-hover:scale-110 transition-transform" />
             </div>
-            <span className="font-display text-lg tracking-wider uppercase">
+            <span className="font-display text-base sm:text-lg tracking-wider uppercase">
               Add Player {count + 1}
             </span>
-            <span className="text-xs text-brand-cream/40 group-hover:text-brand-orange/60 font-mono">
+            <span className="text-xs text-brand-cream/50 group-hover:text-brand-orange/70 font-mono">
               ({10 - count} remaining)
             </span>
           </button>
         ) : (
-          <div className="flex items-center justify-center gap-3 py-3.5 bg-green-900/20 border-2 border-green-600/40 text-green-400">
+          <div className="flex items-center justify-center gap-2.5 sm:gap-3 py-3 sm:py-3.5 bg-green-900/20 border-2 border-green-600/40 text-green-400 min-h-[46px]">
             <div className="w-6 h-6 bg-green-900/50 flex items-center justify-center">
               <Check size={16} />
             </div>
-            <span className="font-display text-lg tracking-wider uppercase">
+            <span className="font-display text-base sm:text-lg tracking-wider uppercase font-bold">
               Roster Complete — 10 / 10 Players
             </span>
           </div>
@@ -343,13 +360,7 @@ export default function TrialRegistrationForm() {
     formData.registerU12Girls,
   ].filter(Boolean).length;
 
-  const totalPlayersFilled =
-    (formData.registerU10Boys ? formData.u10BoysPlayers.filter((p) => p.name.trim()).length : 0) +
-    (formData.registerU10Girls ? formData.u10GirlsPlayers.filter((p) => p.name.trim()).length : 0) +
-    (formData.registerU12Boys ? formData.u12BoysPlayers.filter((p) => p.name.trim()).length : 0) +
-    (formData.registerU12Girls ? formData.u12GirlsPlayers.filter((p) => p.name.trim()).length : 0);
-
-  // Fee calculation: ₹1,000 per team OR ₹100 per player
+  // Fee calculation: ₹1,000 per team
   const teamFee = teamCount * clubConfig.leagueInfo.feeStructure.perTeam;
 
   const handleChange = (
@@ -363,10 +374,14 @@ export default function TrialRegistrationForm() {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
 
-    if (fieldErrors[name]) {
+    // Auto-clear error when user modifies the field
+    if (fieldErrors[name] || fieldErrors.categorySelection) {
       setFieldErrors((prev) => {
         const updated = { ...prev };
         delete updated[name];
+        if (name.startsWith("register")) {
+          delete updated.categorySelection;
+        }
         return updated;
       });
     }
@@ -384,6 +399,16 @@ export default function TrialRegistrationForm() {
       players[index] = { ...players[index], [field]: value };
       return { ...prev, [categoryKey]: players };
     });
+
+    const errorKey = `${categoryKey}_${index}_${field}`;
+    if (fieldErrors[errorKey] || fieldErrors[categoryKey]) {
+      setFieldErrors((prev) => {
+        const updated = { ...prev };
+        delete updated[errorKey];
+        delete updated[categoryKey];
+        return updated;
+      });
+    }
   };
 
   const handleAddPlayer = (
@@ -437,11 +462,26 @@ export default function TrialRegistrationForm() {
           totalPlayers: registeredCategories.length * 10,
           totalFee: finalFee,
         });
+
+        window.scrollTo({ top: 100, behavior: "smooth" });
       } catch (err: unknown) {
         if (err instanceof ZodError) {
-          const errors = err.flatten().fieldErrors;
-          setFieldErrors(errors as Record<string, string[]>);
+          const errorMap: Record<string, string[]> = {};
+          for (const issue of err.issues) {
+            const key = issue.path.join("_");
+            if (!errorMap[key]) {
+              errorMap[key] = [];
+            }
+            errorMap[key].push(issue.message);
+          }
+          setFieldErrors(errorMap);
           setGeneralError("Please resolve the highlighted validation errors before submitting.");
+
+          // Smooth scroll to top of form or first error
+          const formTop = document.getElementById("register-form");
+          if (formTop) {
+            formTop.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
         } else {
           setGeneralError("An unexpected error occurred while submitting your school registration.");
         }
@@ -469,40 +509,40 @@ export default function TrialRegistrationForm() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* WELCOME BANNER & OFFICIAL LEAGUE GUIDELINES */}
-        <div className="bg-brand-dark/95 border-2 sm:border-4 border-brand-orange p-4 sm:p-10 mb-8 sm:mb-12 shadow-2xl space-y-6 relative" id="register-form">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-brand-orange/40 pb-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-orange/20 border border-brand-orange text-brand-orange font-display text-sm tracking-wider uppercase">
-              <ShieldCheck size={18} />
+        <div className="bg-brand-dark/95 border-2 sm:border-4 border-brand-orange p-4 sm:p-10 mb-8 sm:mb-12 shadow-2xl space-y-5 sm:space-y-6 relative" id="register-form">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 border-b border-brand-orange/40 pb-3 sm:pb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-orange/20 border border-brand-orange text-brand-orange font-display text-xs sm:text-sm tracking-wider uppercase">
+              <ShieldCheck size={16} />
               OFFICIAL LEAGUE ANNOUNCEMENT
             </div>
-            <span className="font-display text-lg sm:text-xl text-brand-yellow tracking-widest uppercase">
+            <span className="font-display text-sm sm:text-xl text-brand-yellow tracking-widest uppercase">
               THIRUVANANTHAPURAM
             </span>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             <h2 className="font-display text-brand-cream font-bold uppercase tracking-tight leading-none whitespace-nowrap overflow-hidden text-ellipsis"
               style={{ fontSize: "clamp(1.1rem, 4.5vw, 3.75rem)" }}>
               BLK BUDDIES LEAGUE – <span className="text-brand-orange">TRIVANDRUM</span>
             </h2>
-            <p className="text-brand-yellow font-display text-lg sm:text-2xl uppercase tracking-wide">
+            <p className="text-brand-yellow font-display text-base sm:text-2xl uppercase tracking-wide">
               {clubConfig.leagueInfo.welcomeText}
             </p>
           </div>
 
           {/* Categories Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             {clubConfig.leagueInfo.categories.map((cat) => (
               <div
                 key={cat.id}
-                className="p-4 bg-brand-blue/20 border border-brand-blue/50 flex items-start gap-3"
+                className="p-3 sm:p-4 bg-brand-blue/20 border border-brand-blue/50 flex items-start gap-3"
               >
-                <span className="text-2xl shrink-0">🏀</span>
+                <span className="text-xl sm:text-2xl shrink-0">🏀</span>
                 <div>
-                  <div className="font-display text-xl text-brand-cream uppercase font-bold">
+                  <div className="font-display text-lg sm:text-xl text-brand-cream uppercase font-bold leading-tight">
                     {cat.name}
                   </div>
-                  <div className="text-sm text-brand-orange font-semibold">
+                  <div className="text-xs sm:text-sm text-brand-orange font-semibold mt-0.5">
                     {cat.cutoff}
                   </div>
                 </div>
@@ -511,12 +551,12 @@ export default function TrialRegistrationForm() {
           </div>
 
           {/* Registration Rules & Guidelines List */}
-          <div className="p-4 bg-brand-dark border border-brand-blue/30 space-y-2">
-            <div className="flex items-center gap-2 text-brand-yellow font-display text-lg uppercase tracking-wider">
+          <div className="p-3.5 sm:p-4 bg-brand-dark border border-brand-blue/30 space-y-2">
+            <div className="flex items-center gap-2 text-brand-yellow font-display text-base sm:text-lg uppercase tracking-wider">
               <Info size={18} />
               Official Registration Rules
             </div>
-            <ul className="list-disc list-inside space-y-1.5 text-sm text-brand-cream/90 font-normal">
+            <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm text-brand-cream/90 font-normal">
               {clubConfig.leagueInfo.rules.map((rule, idx) => (
                 <li key={idx}>{rule}</li>
               ))}
@@ -524,12 +564,12 @@ export default function TrialRegistrationForm() {
           </div>
 
           {/* Fee Structure Summary Banner */}
-          <div className="p-5 bg-gradient-to-r from-brand-orange/20 via-brand-yellow/10 to-brand-orange/20 border-2 border-brand-yellow flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="p-4 sm:p-5 bg-gradient-to-r from-brand-orange/20 via-brand-yellow/10 to-brand-orange/20 border-2 border-brand-yellow flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
             <div>
-              <div className="font-display text-2xl text-brand-yellow uppercase font-bold">
+              <div className="font-display text-xl sm:text-2xl text-brand-yellow uppercase font-bold">
                 REGISTRATION FEE
               </div>
-              <div className="text-base text-brand-cream font-semibold">
+              <div className="text-sm sm:text-base text-brand-cream font-semibold mt-0.5">
                 ₹1,000 per team <span className="text-brand-orange font-bold">OR</span> ₹100 per player
               </div>
             </div>
@@ -541,63 +581,63 @@ export default function TrialRegistrationForm() {
 
         {/* Success Screen State */}
         {successData ? (
-          <div className="bg-brand-dark border-4 border-brand-orange p-6 sm:p-12 shadow-2xl relative animate-in fade-in zoom-in-95 duration-300">
-            <div className="text-center space-y-6">
-              <div className="w-20 h-20 bg-brand-orange/20 border-2 border-brand-orange text-brand-orange rounded-full flex items-center justify-center mx-auto">
-                <CheckCircle2 size={48} />
+          <div className="bg-brand-dark border-4 border-brand-orange p-5 sm:p-12 shadow-2xl relative animate-in fade-in zoom-in-95 duration-300">
+            <div className="text-center space-y-5 sm:space-y-6">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-brand-orange/20 border-2 border-brand-orange text-brand-orange rounded-full flex items-center justify-center mx-auto">
+                <CheckCircle2 size={40} />
               </div>
 
-              <div className="space-y-2">
-                <h3 className="font-display text-3xl sm:text-5xl text-brand-cream font-bold uppercase">
+              <div className="space-y-1.5 sm:space-y-2">
+                <h3 className="font-display text-2xl sm:text-5xl text-brand-cream font-bold uppercase">
                   SCHOOL REGISTRATION CONFIRMED
                 </h3>
-                <p className="text-xl text-brand-yellow font-medium">
+                <p className="text-base sm:text-xl text-brand-yellow font-medium max-w-xl mx-auto">
                   {successData.message}
                 </p>
               </div>
 
               {/* Reference Number Display Card */}
-              <div className="max-w-md mx-auto p-6 bg-brand-blue/20 border-2 border-brand-yellow space-y-3">
-                <div className="text-xs uppercase tracking-widest text-brand-cream/70 font-semibold">
+              <div className="max-w-md mx-auto p-4 sm:p-6 bg-brand-blue/20 border-2 border-brand-yellow space-y-2 sm:space-y-3">
+                <div className="text-[10px] sm:text-xs uppercase tracking-widest text-brand-cream/70 font-semibold">
                   OFFICIAL LEAGUE REGISTRATION REFERENCE
                 </div>
-                <div className="font-display text-4xl sm:text-5xl tracking-widest text-brand-orange font-bold">
+                <div className="font-display text-3xl sm:text-5xl tracking-widest text-brand-orange font-bold break-all">
                   {successData.referenceNo}
                 </div>
                 <button
                   type="button"
                   onClick={handleCopyReference}
-                  className="inline-flex items-center gap-2 text-sm text-brand-cream hover:text-brand-yellow bg-brand-dark px-4 py-2 border border-brand-blue/40 hover:border-brand-yellow transition-all"
+                  className="inline-flex items-center gap-2 text-xs sm:text-sm text-brand-cream hover:text-brand-yellow bg-brand-dark px-3 py-1.5 sm:px-4 sm:py-2 border border-brand-blue/40 hover:border-brand-yellow transition-all"
                 >
                   {copied ? (
                     <>
-                      <Check size={16} className="text-green-400" /> Reference Copied!
+                      <Check size={14} className="text-green-400" /> Reference Copied!
                     </>
                   ) : (
                     <>
-                      <Copy size={16} /> Copy Reference Code
+                      <Copy size={14} /> Copy Reference Code
                     </>
                   )}
                 </button>
               </div>
 
               {/* Summary Details */}
-              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-left p-6 bg-brand-dark/80 border border-brand-blue/30 max-w-3xl mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 text-left p-4 sm:p-6 bg-brand-dark/80 border border-brand-blue/30 max-w-3xl mx-auto">
                 <div>
-                  <span className="text-xs text-brand-cream/60 uppercase block font-semibold">School Name</span>
-                  <span className="font-display text-lg text-brand-cream">{successData.schoolName}</span>
+                  <span className="text-[11px] text-brand-cream/60 uppercase block font-semibold">School Name</span>
+                  <span className="font-display text-base sm:text-lg text-brand-cream truncate block">{successData.schoolName}</span>
                 </div>
                 <div>
-                  <span className="text-xs text-brand-cream/60 uppercase block font-semibold">Representative</span>
-                  <span className="font-display text-lg text-brand-yellow">{successData.repName}</span>
+                  <span className="text-[11px] text-brand-cream/60 uppercase block font-semibold">Representative</span>
+                  <span className="font-display text-base sm:text-lg text-brand-yellow truncate block">{successData.repName}</span>
                 </div>
                 <div>
-                  <span className="text-xs text-brand-cream/60 uppercase block font-semibold">Registered Categories</span>
-                  <span className="font-display text-lg text-brand-orange">{successData.registeredCategories.join(", ")}</span>
+                  <span className="text-[11px] text-brand-cream/60 uppercase block font-semibold">Registered Categories</span>
+                  <span className="font-display text-base sm:text-lg text-brand-orange truncate block">{successData.registeredCategories.join(", ")}</span>
                 </div>
                 <div>
-                  <span className="text-xs text-brand-cream/60 uppercase block font-semibold">Total Registration Fee</span>
-                  <span className="font-display text-2xl text-brand-yellow font-bold">₹{successData.totalFee.toLocaleString("en-IN")}</span>
+                  <span className="text-[11px] text-brand-cream/60 uppercase block font-semibold">Total Registration Fee</span>
+                  <span className="font-display text-xl sm:text-2xl text-brand-yellow font-bold">₹{successData.totalFee.toLocaleString("en-IN")}</span>
                 </div>
               </div>
 
@@ -605,11 +645,11 @@ export default function TrialRegistrationForm() {
                 A confirmation summary has been sent to representative email <strong className="text-brand-cream">{successData.repEmail}</strong>. Our league committee will issue tournament match fixtures soon.
               </p>
 
-              <div className="pt-4 flex justify-center">
+              <div className="pt-2 sm:pt-4 flex justify-center">
                 <button
                   type="button"
                   onClick={handleResetForm}
-                  className="btn-secondary"
+                  className="btn-secondary w-full sm:w-auto text-center"
                 >
                   Register Another School
                 </button>
@@ -620,39 +660,39 @@ export default function TrialRegistrationForm() {
           /* Form Container */
           <form
             onSubmit={handleSubmit}
-            className="bg-brand-dark/95 border-2 border-brand-blue/40 p-4 sm:p-8 lg:p-10 shadow-2xl space-y-8 sm:space-y-10 relative"
+            className="bg-brand-dark/95 border-2 border-brand-blue/40 p-4 sm:p-8 lg:p-10 shadow-2xl space-y-6 sm:space-y-10 relative"
             noValidate
           >
             {/* Corner Graphic Accent */}
-            <div className="absolute top-0 right-0 w-12 h-12 bg-brand-orange/20 border-b border-l border-brand-orange pointer-events-none" />
+            <div className="absolute top-0 right-0 w-8 h-8 sm:w-12 sm:h-12 bg-brand-orange/20 border-b border-l border-brand-orange pointer-events-none" />
 
             {/* General Banner Error */}
             {generalError && (
-              <div className="p-4 bg-red-950/80 border-2 border-red-500 text-red-200 flex items-start gap-3">
-                <AlertTriangle size={24} className="text-red-400 shrink-0 mt-0.5" />
+              <div className="p-3.5 sm:p-4 bg-red-950/80 border-2 border-red-500 text-red-200 flex items-start gap-3">
+                <AlertTriangle size={22} className="text-red-400 shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-display text-xl text-red-300 uppercase">Submission Error</h4>
-                  <p className="text-sm text-red-200/90">{generalError}</p>
+                  <h4 className="font-display text-lg sm:text-xl text-red-300 uppercase">Submission Error</h4>
+                  <p className="text-xs sm:text-sm text-red-200/90">{generalError}</p>
                 </div>
               </div>
             )}
 
             {/* SECTION 1: SCHOOL DETAILS */}
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div className="border-b-2 border-brand-orange pb-2 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <School className="text-brand-orange" size={24} />
-                  <h3 className="font-display text-2xl text-brand-yellow uppercase tracking-wide">
+                <div className="flex items-center gap-2.5 sm:gap-3">
+                  <School className="text-brand-orange" size={22} />
+                  <h3 className="font-display text-xl sm:text-2xl text-brand-yellow uppercase tracking-wide">
                     1. School Details
                   </h3>
                 </div>
-                <span className="text-xs text-brand-cream/60 uppercase font-semibold">Step 1 of 4</span>
+                <span className="text-[11px] sm:text-xs text-brand-cream/60 uppercase font-semibold">Step 1 of 4</span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 {/* School Name */}
-                <div className="space-y-2">
-                  <label htmlFor="schoolName" className="block text-sm font-semibold text-brand-cream uppercase tracking-wider">
+                <div className="space-y-1.5">
+                  <label htmlFor="schoolName" className="block text-xs sm:text-sm font-semibold text-brand-cream uppercase tracking-wider">
                     School Name <span className="text-brand-orange">*</span>
                   </label>
                   <input
@@ -663,16 +703,20 @@ export default function TrialRegistrationForm() {
                     value={formData.schoolName}
                     onChange={handleChange}
                     placeholder="Full official school name"
-                    className="w-full bg-brand-dark border-2 border-brand-blue/50 text-brand-cream px-4 py-3 focus:outline-none focus:border-brand-orange transition-colors"
+                    className={`w-full bg-brand-dark border-2 text-brand-cream px-3 py-2.5 sm:px-4 sm:py-3 text-base focus:outline-none transition-colors min-h-[44px] ${
+                      fieldErrors.schoolName ? "border-red-500 bg-red-950/10 focus:border-red-400" : "border-brand-blue/50 focus:border-brand-orange"
+                    }`}
                   />
                   {fieldErrors.schoolName && (
-                    <p className="text-xs text-red-400 font-medium">{fieldErrors.schoolName[0]}</p>
+                    <p className="text-xs text-red-400 font-medium flex items-center gap-1 mt-1">
+                      <AlertTriangle size={13} className="shrink-0" /> {fieldErrors.schoolName[0]}
+                    </p>
                   )}
                 </div>
 
                 {/* Syllabus Followed */}
-                <div className="space-y-2">
-                  <label htmlFor="syllabus" className="block text-sm font-semibold text-brand-cream uppercase tracking-wider">
+                <div className="space-y-1.5">
+                  <label htmlFor="syllabus" className="block text-xs sm:text-sm font-semibold text-brand-cream uppercase tracking-wider">
                     Syllabus Followed in Your School <span className="text-brand-orange">*</span>
                   </label>
                   <select
@@ -680,7 +724,9 @@ export default function TrialRegistrationForm() {
                     name="syllabus"
                     value={formData.syllabus}
                     onChange={handleChange}
-                    className="w-full bg-brand-dark border-2 border-brand-blue/50 text-brand-cream px-4 py-3 focus:outline-none focus:border-brand-orange transition-colors"
+                    className={`w-full bg-brand-dark border-2 text-brand-cream px-3 py-2.5 sm:px-4 sm:py-3 text-base focus:outline-none transition-colors min-h-[44px] ${
+                      fieldErrors.syllabus ? "border-red-500 bg-red-950/10 focus:border-red-400" : "border-brand-blue/50 focus:border-brand-orange"
+                    }`}
                   >
                     {clubConfig.syllabuses.map((s) => (
                       <option key={s} value={s}>
@@ -689,13 +735,15 @@ export default function TrialRegistrationForm() {
                     ))}
                   </select>
                   {fieldErrors.syllabus && (
-                    <p className="text-xs text-red-400 font-medium">{fieldErrors.syllabus[0]}</p>
+                    <p className="text-xs text-red-400 font-medium flex items-center gap-1 mt-1">
+                      <AlertTriangle size={13} className="shrink-0" /> {fieldErrors.syllabus[0]}
+                    </p>
                   )}
                 </div>
 
                 {formData.syllabus === "Other" && (
-                  <div className="space-y-2 md:col-span-2">
-                    <label htmlFor="otherSyllabus" className="block text-sm font-semibold text-brand-cream uppercase tracking-wider">
+                  <div className="space-y-1.5 md:col-span-2">
+                    <label htmlFor="otherSyllabus" className="block text-xs sm:text-sm font-semibold text-brand-cream uppercase tracking-wider">
                       Specify Other Syllabus
                     </label>
                     <input
@@ -705,14 +753,14 @@ export default function TrialRegistrationForm() {
                       value={formData.otherSyllabus}
                       onChange={handleChange}
                       placeholder="Specify your school syllabus"
-                      className="w-full bg-brand-dark border-2 border-brand-blue/50 text-brand-cream px-4 py-3 focus:outline-none focus:border-brand-orange transition-colors"
+                      className="w-full bg-brand-dark border-2 border-brand-blue/50 text-brand-cream px-3 py-2.5 sm:px-4 sm:py-3 text-base focus:outline-none focus:border-brand-orange transition-colors min-h-[44px]"
                     />
                   </div>
                 )}
 
                 {/* School Email ID */}
-                <div className="space-y-2">
-                  <label htmlFor="schoolEmail" className="block text-sm font-semibold text-brand-cream uppercase tracking-wider">
+                <div className="space-y-1.5">
+                  <label htmlFor="schoolEmail" className="block text-xs sm:text-sm font-semibold text-brand-cream uppercase tracking-wider">
                     School Email ID <span className="text-brand-orange">*</span>
                   </label>
                   <input
@@ -723,16 +771,20 @@ export default function TrialRegistrationForm() {
                     value={formData.schoolEmail}
                     onChange={handleChange}
                     placeholder="school@example.com"
-                    className="w-full bg-brand-dark border-2 border-brand-blue/50 text-brand-cream px-4 py-3 focus:outline-none focus:border-brand-orange transition-colors"
+                    className={`w-full bg-brand-dark border-2 text-brand-cream px-3 py-2.5 sm:px-4 sm:py-3 text-base focus:outline-none transition-colors min-h-[44px] ${
+                      fieldErrors.schoolEmail ? "border-red-500 bg-red-950/10 focus:border-red-400" : "border-brand-blue/50 focus:border-brand-orange"
+                    }`}
                   />
                   {fieldErrors.schoolEmail && (
-                    <p className="text-xs text-red-400 font-medium">{fieldErrors.schoolEmail[0]}</p>
+                    <p className="text-xs text-red-400 font-medium flex items-center gap-1 mt-1">
+                      <AlertTriangle size={13} className="shrink-0" /> {fieldErrors.schoolEmail[0]}
+                    </p>
                   )}
                 </div>
 
                 {/* School Contact Number */}
-                <div className="space-y-2">
-                  <label htmlFor="schoolPhone" className="block text-sm font-semibold text-brand-cream uppercase tracking-wider">
+                <div className="space-y-1.5">
+                  <label htmlFor="schoolPhone" className="block text-xs sm:text-sm font-semibold text-brand-cream uppercase tracking-wider">
                     School Contact Number <span className="text-brand-orange">*</span>
                   </label>
                   <input
@@ -743,16 +795,20 @@ export default function TrialRegistrationForm() {
                     value={formData.schoolPhone}
                     onChange={handleChange}
                     placeholder="10-digit school contact phone"
-                    className="w-full bg-brand-dark border-2 border-brand-blue/50 text-brand-cream px-4 py-3 focus:outline-none focus:border-brand-orange transition-colors"
+                    className={`w-full bg-brand-dark border-2 text-brand-cream px-3 py-2.5 sm:px-4 sm:py-3 text-base focus:outline-none transition-colors min-h-[44px] ${
+                      fieldErrors.schoolPhone ? "border-red-500 bg-red-950/10 focus:border-red-400" : "border-brand-blue/50 focus:border-brand-orange"
+                    }`}
                   />
                   {fieldErrors.schoolPhone && (
-                    <p className="text-xs text-red-400 font-medium">{fieldErrors.schoolPhone[0]}</p>
+                    <p className="text-xs text-red-400 font-medium flex items-center gap-1 mt-1">
+                      <AlertTriangle size={13} className="shrink-0" /> {fieldErrors.schoolPhone[0]}
+                    </p>
                   )}
                 </div>
 
                 {/* School Address */}
-                <div className="md:col-span-2 space-y-2">
-                  <label htmlFor="schoolAddress" className="block text-sm font-semibold text-brand-cream uppercase tracking-wider">
+                <div className="md:col-span-2 space-y-1.5">
+                  <label htmlFor="schoolAddress" className="block text-xs sm:text-sm font-semibold text-brand-cream uppercase tracking-wider">
                     School Address <span className="text-brand-orange">*</span>
                   </label>
                   <textarea
@@ -763,31 +819,35 @@ export default function TrialRegistrationForm() {
                     value={formData.schoolAddress}
                     onChange={handleChange}
                     placeholder="Full street address, district, pincode"
-                    className="w-full bg-brand-dark border-2 border-brand-blue/50 text-brand-cream px-4 py-3 focus:outline-none focus:border-brand-orange transition-colors"
+                    className={`w-full bg-brand-dark border-2 text-brand-cream px-3 py-2.5 sm:px-4 sm:py-3 text-base focus:outline-none transition-colors ${
+                      fieldErrors.schoolAddress ? "border-red-500 bg-red-950/10 focus:border-red-400" : "border-brand-blue/50 focus:border-brand-orange"
+                    }`}
                   />
                   {fieldErrors.schoolAddress && (
-                    <p className="text-xs text-red-400 font-medium">{fieldErrors.schoolAddress[0]}</p>
+                    <p className="text-xs text-red-400 font-medium flex items-center gap-1 mt-1">
+                      <AlertTriangle size={13} className="shrink-0" /> {fieldErrors.schoolAddress[0]}
+                    </p>
                   )}
                 </div>
               </div>
             </div>
 
             {/* SECTION 2: SCHOOL REPRESENTATIVE */}
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div className="border-b-2 border-brand-orange pb-2 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <UserCheck className="text-brand-orange" size={24} />
-                  <h3 className="font-display text-2xl text-brand-yellow uppercase tracking-wide">
+                <div className="flex items-center gap-2.5 sm:gap-3">
+                  <UserCheck className="text-brand-orange" size={22} />
+                  <h3 className="font-display text-xl sm:text-2xl text-brand-yellow uppercase tracking-wide">
                     2. School Representative
                   </h3>
                 </div>
-                <span className="text-xs text-brand-cream/60 uppercase font-semibold">Step 2 of 4</span>
+                <span className="text-[11px] sm:text-xs text-brand-cream/60 uppercase font-semibold">Step 2 of 4</span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 {/* Name of Representative */}
-                <div className="space-y-2">
-                  <label htmlFor="repName" className="block text-sm font-semibold text-brand-cream uppercase tracking-wider">
+                <div className="space-y-1.5">
+                  <label htmlFor="repName" className="block text-xs sm:text-sm font-semibold text-brand-cream uppercase tracking-wider">
                     Name of School Representative <span className="text-brand-orange">*</span>
                   </label>
                   <input
@@ -798,16 +858,20 @@ export default function TrialRegistrationForm() {
                     value={formData.repName}
                     onChange={handleChange}
                     placeholder="Full name of representative"
-                    className="w-full bg-brand-dark border-2 border-brand-blue/50 text-brand-cream px-4 py-3 focus:outline-none focus:border-brand-orange transition-colors"
+                    className={`w-full bg-brand-dark border-2 text-brand-cream px-3 py-2.5 sm:px-4 sm:py-3 text-base focus:outline-none transition-colors min-h-[44px] ${
+                      fieldErrors.repName ? "border-red-500 bg-red-950/10 focus:border-red-400" : "border-brand-blue/50 focus:border-brand-orange"
+                    }`}
                   />
                   {fieldErrors.repName && (
-                    <p className="text-xs text-red-400 font-medium">{fieldErrors.repName[0]}</p>
+                    <p className="text-xs text-red-400 font-medium flex items-center gap-1 mt-1">
+                      <AlertTriangle size={13} className="shrink-0" /> {fieldErrors.repName[0]}
+                    </p>
                   )}
                 </div>
 
                 {/* Designation */}
-                <div className="space-y-2">
-                  <label htmlFor="repDesignation" className="block text-sm font-semibold text-brand-cream uppercase tracking-wider">
+                <div className="space-y-1.5">
+                  <label htmlFor="repDesignation" className="block text-xs sm:text-sm font-semibold text-brand-cream uppercase tracking-wider">
                     Designation <span className="text-brand-orange">*</span>
                   </label>
                   <select
@@ -815,7 +879,9 @@ export default function TrialRegistrationForm() {
                     name="repDesignation"
                     value={formData.repDesignation}
                     onChange={handleChange}
-                    className="w-full bg-brand-dark border-2 border-brand-blue/50 text-brand-cream px-4 py-3 focus:outline-none focus:border-brand-orange transition-colors"
+                    className={`w-full bg-brand-dark border-2 text-brand-cream px-3 py-2.5 sm:px-4 sm:py-3 text-base focus:outline-none transition-colors min-h-[44px] ${
+                      fieldErrors.repDesignation ? "border-red-500 bg-red-950/10 focus:border-red-400" : "border-brand-blue/50 focus:border-brand-orange"
+                    }`}
                   >
                     {clubConfig.designations.map((d) => (
                       <option key={d} value={d}>
@@ -824,13 +890,15 @@ export default function TrialRegistrationForm() {
                     ))}
                   </select>
                   {fieldErrors.repDesignation && (
-                    <p className="text-xs text-red-400 font-medium">{fieldErrors.repDesignation[0]}</p>
+                    <p className="text-xs text-red-400 font-medium flex items-center gap-1 mt-1">
+                      <AlertTriangle size={13} className="shrink-0" /> {fieldErrors.repDesignation[0]}
+                    </p>
                   )}
                 </div>
 
                 {formData.repDesignation === "Other" && (
-                  <div className="space-y-2 md:col-span-2">
-                    <label htmlFor="otherDesignation" className="block text-sm font-semibold text-brand-cream uppercase tracking-wider">
+                  <div className="space-y-1.5 md:col-span-2">
+                    <label htmlFor="otherDesignation" className="block text-xs sm:text-sm font-semibold text-brand-cream uppercase tracking-wider">
                       Specify Other Designation
                     </label>
                     <input
@@ -840,14 +908,14 @@ export default function TrialRegistrationForm() {
                       value={formData.otherDesignation}
                       onChange={handleChange}
                       placeholder="Specify your designation"
-                      className="w-full bg-brand-dark border-2 border-brand-blue/50 text-brand-cream px-4 py-3 focus:outline-none focus:border-brand-orange transition-colors"
+                      className="w-full bg-brand-dark border-2 border-brand-blue/50 text-brand-cream px-3 py-2.5 sm:px-4 sm:py-3 text-base focus:outline-none focus:border-brand-orange transition-colors min-h-[44px]"
                     />
                   </div>
                 )}
 
                 {/* Representative Phone */}
-                <div className="space-y-2">
-                  <label htmlFor="repPhone" className="block text-sm font-semibold text-brand-cream uppercase tracking-wider">
+                <div className="space-y-1.5">
+                  <label htmlFor="repPhone" className="block text-xs sm:text-sm font-semibold text-brand-cream uppercase tracking-wider">
                     Representative&apos;s Phone Number <span className="text-brand-orange">*</span>
                   </label>
                   <input
@@ -858,16 +926,20 @@ export default function TrialRegistrationForm() {
                     value={formData.repPhone}
                     onChange={handleChange}
                     placeholder="10-digit mobile number"
-                    className="w-full bg-brand-dark border-2 border-brand-blue/50 text-brand-cream px-4 py-3 focus:outline-none focus:border-brand-orange transition-colors"
+                    className={`w-full bg-brand-dark border-2 text-brand-cream px-3 py-2.5 sm:px-4 sm:py-3 text-base focus:outline-none transition-colors min-h-[44px] ${
+                      fieldErrors.repPhone ? "border-red-500 bg-red-950/10 focus:border-red-400" : "border-brand-blue/50 focus:border-brand-orange"
+                    }`}
                   />
                   {fieldErrors.repPhone && (
-                    <p className="text-xs text-red-400 font-medium">{fieldErrors.repPhone[0]}</p>
+                    <p className="text-xs text-red-400 font-medium flex items-center gap-1 mt-1">
+                      <AlertTriangle size={13} className="shrink-0" /> {fieldErrors.repPhone[0]}
+                    </p>
                   )}
                 </div>
 
                 {/* Representative Email */}
-                <div className="space-y-2">
-                  <label htmlFor="repEmail" className="block text-sm font-semibold text-brand-cream uppercase tracking-wider">
+                <div className="space-y-1.5">
+                  <label htmlFor="repEmail" className="block text-xs sm:text-sm font-semibold text-brand-cream uppercase tracking-wider">
                     Representative&apos;s Email ID <span className="text-brand-orange">*</span>
                   </label>
                   <input
@@ -878,44 +950,57 @@ export default function TrialRegistrationForm() {
                     value={formData.repEmail}
                     onChange={handleChange}
                     placeholder="representative@example.com"
-                    className="w-full bg-brand-dark border-2 border-brand-blue/50 text-brand-cream px-4 py-3 focus:outline-none focus:border-brand-orange transition-colors"
+                    className={`w-full bg-brand-dark border-2 text-brand-cream px-3 py-2.5 sm:px-4 sm:py-3 text-base focus:outline-none transition-colors min-h-[44px] ${
+                      fieldErrors.repEmail ? "border-red-500 bg-red-950/10 focus:border-red-400" : "border-brand-blue/50 focus:border-brand-orange"
+                    }`}
                   />
                   {fieldErrors.repEmail && (
-                    <p className="text-xs text-red-400 font-medium">{fieldErrors.repEmail[0]}</p>
+                    <p className="text-xs text-red-400 font-medium flex items-center gap-1 mt-1">
+                      <AlertTriangle size={13} className="shrink-0" /> {fieldErrors.repEmail[0]}
+                    </p>
                   )}
                 </div>
               </div>
             </div>
 
             {/* SECTION 3: TEAM CATEGORIES SELECTION & FEE CALCULATOR */}
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div className="border-b-2 border-brand-orange pb-2 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Users className="text-brand-orange" size={24} />
-                  <h3 className="font-display text-2xl text-brand-yellow uppercase tracking-wide">
+                <div className="flex items-center gap-2.5 sm:gap-3">
+                  <Users className="text-brand-orange" size={22} />
+                  <h3 className="font-display text-xl sm:text-2xl text-brand-yellow uppercase tracking-wide">
                     3. Category Selection & Registration Fee
                   </h3>
                 </div>
-                <span className="text-xs text-brand-cream/60 uppercase font-semibold">Step 3 of 4</span>
+                <span className="text-[11px] sm:text-xs text-brand-cream/60 uppercase font-semibold">Step 3 of 4</span>
               </div>
 
-              <p className="text-sm text-brand-cream/80">
+              <p className="text-xs sm:text-sm text-brand-cream/80">
                 Select the categories in which your school wishes to participate (1, 2, 3 or all 4 teams). Each selected team requires 10 players.
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* U10 Boys Checkbox */}
-                <div className={`p-4 border-2 transition-all ${formData.registerU10Boys ? "bg-brand-blue/20 border-brand-orange" : "bg-brand-dark border-brand-blue/30"}`}>
+              {fieldErrors.categorySelection && (
+                <div className="p-3 bg-red-950/80 border border-red-500 text-xs text-red-200 flex items-center gap-2">
+                  <AlertTriangle size={16} className="text-red-400 shrink-0" />
+                  <span>{fieldErrors.categorySelection[0]}</span>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                {/* U10 Boys Checkbox Card */}
+                <label className={`p-3.5 sm:p-4 border-2 transition-all cursor-pointer block ${
+                  formData.registerU10Boys ? "bg-brand-blue/20 border-brand-orange" : "bg-brand-dark border-brand-blue/30 hover:border-brand-blue/60"
+                }`}>
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <span className="font-display text-xl text-brand-cream uppercase font-bold block">
+                      <span className="font-display text-lg sm:text-xl text-brand-cream uppercase font-bold block leading-tight">
                         🏀 U10 Boys Division
                       </span>
-                      <span className="text-xs text-brand-orange font-semibold">
+                      <span className="text-[11px] sm:text-xs text-brand-orange font-semibold block mt-0.5">
                         Born on or after 01-01-2017
                       </span>
                     </div>
-                    <label className="flex items-center gap-2 cursor-pointer shrink-0">
+                    <div className="flex items-center gap-2 shrink-0 pt-0.5">
                       <input
                         type="checkbox"
                         name="registerU10Boys"
@@ -924,22 +1009,24 @@ export default function TrialRegistrationForm() {
                         className="w-5 h-5 accent-brand-orange cursor-pointer"
                       />
                       <span className="text-xs font-semibold text-brand-yellow uppercase">Select</span>
-                    </label>
+                    </div>
                   </div>
-                </div>
+                </label>
 
-                {/* U10 Girls Checkbox */}
-                <div className={`p-4 border-2 transition-all ${formData.registerU10Girls ? "bg-brand-blue/20 border-brand-orange" : "bg-brand-dark border-brand-blue/30"}`}>
+                {/* U10 Girls Checkbox Card */}
+                <label className={`p-3.5 sm:p-4 border-2 transition-all cursor-pointer block ${
+                  formData.registerU10Girls ? "bg-brand-blue/20 border-brand-orange" : "bg-brand-dark border-brand-blue/30 hover:border-brand-blue/60"
+                }`}>
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <span className="font-display text-xl text-brand-cream uppercase font-bold block">
+                      <span className="font-display text-lg sm:text-xl text-brand-cream uppercase font-bold block leading-tight">
                         🏀 U10 Girls Division
                       </span>
-                      <span className="text-xs text-brand-orange font-semibold">
+                      <span className="text-[11px] sm:text-xs text-brand-orange font-semibold block mt-0.5">
                         Born on or after 01-01-2017
                       </span>
                     </div>
-                    <label className="flex items-center gap-2 cursor-pointer shrink-0">
+                    <div className="flex items-center gap-2 shrink-0 pt-0.5">
                       <input
                         type="checkbox"
                         name="registerU10Girls"
@@ -948,22 +1035,24 @@ export default function TrialRegistrationForm() {
                         className="w-5 h-5 accent-brand-orange cursor-pointer"
                       />
                       <span className="text-xs font-semibold text-brand-yellow uppercase">Select</span>
-                    </label>
+                    </div>
                   </div>
-                </div>
+                </label>
 
-                {/* U12 Boys Checkbox */}
-                <div className={`p-4 border-2 transition-all ${formData.registerU12Boys ? "bg-brand-blue/20 border-brand-orange" : "bg-brand-dark border-brand-blue/30"}`}>
+                {/* U12 Boys Checkbox Card */}
+                <label className={`p-3.5 sm:p-4 border-2 transition-all cursor-pointer block ${
+                  formData.registerU12Boys ? "bg-brand-blue/20 border-brand-orange" : "bg-brand-dark border-brand-blue/30 hover:border-brand-blue/60"
+                }`}>
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <span className="font-display text-xl text-brand-cream uppercase font-bold block">
+                      <span className="font-display text-lg sm:text-xl text-brand-cream uppercase font-bold block leading-tight">
                         🏀 U12 Boys Division
                       </span>
-                      <span className="text-xs text-brand-orange font-semibold">
+                      <span className="text-[11px] sm:text-xs text-brand-orange font-semibold block mt-0.5">
                         Born on or after 01-01-2015
                       </span>
                     </div>
-                    <label className="flex items-center gap-2 cursor-pointer shrink-0">
+                    <div className="flex items-center gap-2 shrink-0 pt-0.5">
                       <input
                         type="checkbox"
                         name="registerU12Boys"
@@ -972,22 +1061,24 @@ export default function TrialRegistrationForm() {
                         className="w-5 h-5 accent-brand-orange cursor-pointer"
                       />
                       <span className="text-xs font-semibold text-brand-yellow uppercase">Select</span>
-                    </label>
+                    </div>
                   </div>
-                </div>
+                </label>
 
-                {/* U12 Girls Checkbox */}
-                <div className={`p-4 border-2 transition-all ${formData.registerU12Girls ? "bg-brand-blue/20 border-brand-orange" : "bg-brand-dark border-brand-blue/30"}`}>
+                {/* U12 Girls Checkbox Card */}
+                <label className={`p-3.5 sm:p-4 border-2 transition-all cursor-pointer block ${
+                  formData.registerU12Girls ? "bg-brand-blue/20 border-brand-orange" : "bg-brand-dark border-brand-blue/30 hover:border-brand-blue/60"
+                }`}>
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <span className="font-display text-xl text-brand-cream uppercase font-bold block">
+                      <span className="font-display text-lg sm:text-xl text-brand-cream uppercase font-bold block leading-tight">
                         🏀 U12 Girls Division
                       </span>
-                      <span className="text-xs text-brand-orange font-semibold">
+                      <span className="text-[11px] sm:text-xs text-brand-orange font-semibold block mt-0.5">
                         Born on or after 01-01-2015
                       </span>
                     </div>
-                    <label className="flex items-center gap-2 cursor-pointer shrink-0">
+                    <div className="flex items-center gap-2 shrink-0 pt-0.5">
                       <input
                         type="checkbox"
                         name="registerU12Girls"
@@ -996,35 +1087,32 @@ export default function TrialRegistrationForm() {
                         className="w-5 h-5 accent-brand-orange cursor-pointer"
                       />
                       <span className="text-xs font-semibold text-brand-yellow uppercase">Select</span>
-                    </label>
+                    </div>
                   </div>
-                </div>
+                </label>
               </div>
-              {fieldErrors.registerU10Boys && (
-                <p className="text-xs text-red-400 font-medium">{fieldErrors.registerU10Boys[0]}</p>
-              )}
 
               {/* REAL-TIME REGISTRATION FEE SUMMARY CARD */}
-              <div className="p-6 bg-brand-dark border-2 border-brand-yellow space-y-4">
-                <div className="flex items-center gap-3 border-b border-brand-yellow/40 pb-3">
-                  <Calculator className="text-brand-yellow" size={24} />
-                  <h4 className="font-display text-xl text-brand-yellow uppercase font-bold">
+              <div className="p-4 sm:p-6 bg-brand-dark border-2 border-brand-yellow space-y-3 sm:space-y-4">
+                <div className="flex items-center gap-2.5 border-b border-brand-yellow/40 pb-2.5">
+                  <Calculator className="text-brand-yellow" size={20} />
+                  <h4 className="font-display text-lg sm:text-xl text-brand-yellow uppercase font-bold">
                     Real-Time Fee Calculator
                   </h4>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center sm:text-left">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-center sm:text-left">
                   <div className="p-3 bg-brand-blue/20 border border-brand-blue/40">
-                    <span className="text-xs uppercase text-brand-cream/70 block">Registered Teams</span>
-                    <span className="font-display text-3xl text-brand-orange">{teamCount} Team(s)</span>
+                    <span className="text-[11px] uppercase text-brand-cream/70 block font-semibold">Registered Teams</span>
+                    <span className="font-display text-2xl sm:text-3xl text-brand-orange">{teamCount} Team(s)</span>
                   </div>
                   <div className="p-3 bg-brand-blue/20 border border-brand-blue/40">
-                    <span className="text-xs uppercase text-brand-cream/70 block">Total Player Roster</span>
-                    <span className="font-display text-3xl text-brand-cream">{teamCount * 10} Players</span>
+                    <span className="text-[11px] uppercase text-brand-cream/70 block font-semibold">Total Player Roster</span>
+                    <span className="font-display text-2xl sm:text-3xl text-brand-cream">{teamCount * 10} Players</span>
                   </div>
                   <div className="p-3 bg-brand-orange/20 border border-brand-orange">
-                    <span className="text-xs uppercase text-brand-cream/70 block">Calculated Total Fee</span>
-                    <span className="font-display text-3xl text-brand-yellow font-bold">
+                    <span className="text-[11px] uppercase text-brand-cream/70 block font-semibold">Calculated Total Fee</span>
+                    <span className="font-display text-2xl sm:text-3xl text-brand-yellow font-bold">
                       ₹{teamFee.toLocaleString("en-IN")}
                     </span>
                   </div>
@@ -1037,13 +1125,21 @@ export default function TrialRegistrationForm() {
             </div>
 
             {/* SECTION 4: 10 PLAYER ROSTERS FOR REGISTERED CATEGORIES */}
-            <div className="space-y-8">
+            <div className="space-y-6 sm:space-y-8">
               <div className="border-b-2 border-brand-orange pb-2 flex items-center justify-between">
-                <h3 className="font-display text-2xl text-brand-yellow uppercase tracking-wide">
+                <h3 className="font-display text-xl sm:text-2xl text-brand-yellow uppercase tracking-wide">
                   4. Player Rosters (10 Players per Registered Team)
                 </h3>
-                <span className="text-xs text-brand-cream/60 uppercase font-semibold">Step 4 of 4</span>
+                <span className="text-[11px] sm:text-xs text-brand-cream/60 uppercase font-semibold">Step 4 of 4</span>
               </div>
+
+              {teamCount === 0 && (
+                <div className="p-4 bg-brand-blue/15 border border-brand-blue/40 text-center space-y-2">
+                  <p className="text-sm text-brand-cream/80">
+                    Please select at least one team category above to enter player rosters.
+                  </p>
+                </div>
+              )}
 
               {/* U10 BOYS ROSTER */}
               {formData.registerU10Boys && (
@@ -1108,38 +1204,40 @@ export default function TrialRegistrationForm() {
 
             {/* CONSENT & AUTHORIZATION */}
             <div className="pt-2">
-              <label className="flex items-start gap-3 cursor-pointer select-none group">
+              <label className="flex items-start gap-3 cursor-pointer select-none group p-3 sm:p-4 bg-brand-dark border border-brand-blue/30 hover:border-brand-blue/60 transition-colors">
                 <input
                   type="checkbox"
                   id="consent"
                   name="consent"
                   checked={formData.consent}
                   onChange={handleChange}
-                  className="mt-1 w-5 h-5 accent-brand-orange cursor-pointer shrink-0"
+                  className="mt-0.5 w-5 h-5 accent-brand-orange cursor-pointer shrink-0"
                 />
-                <span className="text-sm text-brand-cream/90 font-normal leading-snug group-hover:text-brand-cream">
+                <span className="text-xs sm:text-sm text-brand-cream/90 font-normal leading-relaxed group-hover:text-brand-cream">
                   I confirm that I am an authorized representative of the school. All submitted student-player information is accurate and approved for BLK Buddies League participation. <span className="text-brand-orange font-bold">*</span>
                 </span>
               </label>
               {fieldErrors.consent && (
-                <p className="text-xs text-red-400 font-medium mt-1 pl-8">{fieldErrors.consent[0]}</p>
+                <p className="text-xs text-red-400 font-medium mt-1 pl-3 flex items-center gap-1.5">
+                  <AlertTriangle size={13} className="shrink-0" /> {fieldErrors.consent[0]}
+                </p>
               )}
             </div>
 
-            {/* Submit Button */}
-            <div className="pt-4 border-t border-brand-blue/40 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="text-xs text-brand-cream/70 font-semibold">
-                Registration Fee Due: <span className="text-brand-yellow font-display text-lg">₹{teamFee.toLocaleString("en-IN")}</span> ({teamCount} Team(s))
+            {/* Submit Button & Due Fee Bar */}
+            <div className="pt-4 border-t border-brand-blue/40 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+              <div className="text-xs sm:text-sm text-brand-cream/80 font-semibold text-center sm:text-left">
+                Registration Fee Due: <span className="text-brand-yellow font-display text-lg sm:text-xl">₹{teamFee.toLocaleString("en-IN")}</span> ({teamCount} Team(s))
               </div>
               <button
                 type="submit"
                 disabled={isPending}
-                className="btn-primary w-full sm:w-auto text-center flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-primary w-full sm:w-auto text-center flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px]"
                 id="submit-school-registration"
               >
                 {isPending ? (
                   <>
-                    <Loader2 size={22} className="animate-spin text-brand-cream" />
+                    <Loader2 size={20} className="animate-spin text-brand-cream" />
                     SUBMITTING SCHOOL REGISTRATION...
                   </>
                 ) : (

@@ -1,7 +1,5 @@
 import { z } from "zod";
 
-const indianPhoneRegex = /^(\+91[\-\s]?)?[6-9]\d{9}$/;
-
 export function checkDobEligibility(dobString: string, cutoffDateString: string): boolean {
   if (!dobString) return true;
   const dob = new Date(dobString);
@@ -10,11 +8,14 @@ export function checkDobEligibility(dobString: string, cutoffDateString: string)
   return dob >= cutoff;
 }
 
-export const playerRosterSchema = z.object({
-  name: z.string().trim().min(1, "Player name is required"),
-  dob: z.string().refine((val) => val !== "" && !isNaN(Date.parse(val)), {
-    message: "Valid Date of Birth is required",
-  }),
+const isValidIndianPhone = (val: string) => {
+  const clean = val.replace(/[\s\-\(\)]/g, "");
+  return /^(\+91)?[6-9]\d{9}$/.test(clean);
+};
+
+export const playerRosterItemSchema = z.object({
+  name: z.string().default(""),
+  dob: z.string().default(""),
 });
 
 export const schoolRegistrationSchema = z
@@ -33,7 +34,9 @@ export const schoolRegistrationSchema = z
     schoolPhone: z
       .string()
       .trim()
-      .regex(indianPhoneRegex, "Please enter a valid 10-digit School Contact Number."),
+      .refine(isValidIndianPhone, {
+        message: "Please enter a valid 10-digit School Contact Number (e.g. 9876543210).",
+      }),
 
     repName: z
       .string()
@@ -44,7 +47,9 @@ export const schoolRegistrationSchema = z
     repPhone: z
       .string()
       .trim()
-      .regex(indianPhoneRegex, "Please enter a valid Representative Contact Number."),
+      .refine(isValidIndianPhone, {
+        message: "Please enter a valid 10-digit Representative Contact Number.",
+      }),
     repEmail: z
       .string()
       .trim()
@@ -55,16 +60,17 @@ export const schoolRegistrationSchema = z
     registerU12Boys: z.boolean().default(false),
     registerU12Girls: z.boolean().default(false),
 
-    u10BoysPlayers: z.array(playerRosterSchema).default([]),
-    u10GirlsPlayers: z.array(playerRosterSchema).default([]),
-    u12BoysPlayers: z.array(playerRosterSchema).default([]),
-    u12GirlsPlayers: z.array(playerRosterSchema).default([]),
+    u10BoysPlayers: z.array(playerRosterItemSchema).default([]),
+    u10GirlsPlayers: z.array(playerRosterItemSchema).default([]),
+    u12BoysPlayers: z.array(playerRosterItemSchema).default([]),
+    u12GirlsPlayers: z.array(playerRosterItemSchema).default([]),
 
     consent: z.boolean().refine((val) => val === true, {
       message: "You must confirm authorization for school team registration.",
     }),
   })
   .superRefine((data, ctx) => {
+    // 1. Must select at least one team category
     if (
       !data.registerU10Boys &&
       !data.registerU10Girls &&
@@ -73,11 +79,12 @@ export const schoolRegistrationSchema = z
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        path: ["registerU10Boys"],
-        message: "Please select at least one team category to register (U10 / U12 Boys/Girls).",
+        path: ["categorySelection"],
+        message: "Please select at least one team category to participate (U10 / U12 Boys/Girls).",
       });
     }
 
+    // 2. Validate roster for each registered category
     const validateCategoryRoster = (
       registered: boolean,
       players: { name: string; dob: string }[],
@@ -91,7 +98,7 @@ export const schoolRegistrationSchema = z
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             path: [pathKey],
-            message: `Each registered team must consist of 10 players. Please enter 10 players for ${categoryName}.`,
+            message: `Each registered team must consist of 10 players. Currently ${players.length}/10 players added for ${categoryName}.`,
           });
         }
         players.forEach((p, idx) => {
