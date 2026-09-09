@@ -11,7 +11,7 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-brand-dark flex flex-col">
       <Header />
-      <main className="flex-grow pt-20">
+      <main className="flex-grow pt-16 sm:pt-20">
         <TrialRegistrationForm />
       </main>
       <Footer />

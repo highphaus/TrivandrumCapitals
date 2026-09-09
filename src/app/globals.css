@@ -4,20 +4,29 @@
 
 /* ─── Brand Color Tokens ─────────────────────────────────────────────────── */
 :root {
-  --color-dark:   #032245;  /* Dark Blue — background        */
-  --color-blue:   #1D719C;  /* Blue — borders, structure     */
-  --color-orange: #E84103;  /* Orange — CTAs, actions        */
-  --color-yellow: #FBA643;  /* Yellow — headings, highlights */
-  --color-cream:  #FDF7D6;  /* Cream — body text             */
+  --color-dark:   #032245;
+  --color-blue:   #1D719C;
+  --color-orange: #E84103;
+  --color-yellow: #FBA643;
+  --color-cream:  #FDF7D6;
 }
 
 /* ─── Base Layer ─────────────────────────────────────────────────────────── */
 @layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    overflow-x: hidden;
+  }
+
   body {
     background-color: var(--color-dark);
     color: var(--color-cream);
     font-family: var(--font-jakarta), sans-serif;
     overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -26,18 +35,26 @@
     text-transform: uppercase;
   }
 
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  input, select, textarea, button {
+    min-height: 44px; /* minimum touch target */
+  }
+
   ::selection {
     background-color: var(--color-orange);
     color: var(--color-cream);
   }
 }
 
-/* ─── Court Grid Texture (removed) ─────────────────────────────────────── */
+/* ─── Court Grid Texture ─────────────────────────────────────────────────── */
 .court-overlay {
   position: relative;
 }
 
-/* Subtle radial orange glow */
 .court-overlay::before {
   content: '';
   position: absolute;
@@ -56,35 +73,64 @@
 
 /* PRIMARY — Orange fill → transparent on hover */
 .btn-primary {
-  @apply inline-flex items-center justify-center font-display text-base sm:text-xl uppercase tracking-wider
-         bg-brand-orange text-brand-cream px-5 py-2.5 sm:px-8 sm:py-3.5 border-2 border-brand-orange
+  @apply inline-flex items-center justify-center font-display uppercase tracking-wider
+         bg-brand-orange text-brand-cream border-2 border-brand-orange
          hover:bg-transparent hover:text-brand-orange
          transition-all duration-200 cursor-pointer shadow-lg
-         active:translate-y-0.5;
+         active:translate-y-0.5
+         text-sm px-4 py-2.5
+         sm:text-base sm:px-6 sm:py-3
+         md:text-lg md:px-8 md:py-3.5;
+  min-height: 44px;
 }
 
 /* SECONDARY — Transparent cream border → cream fill on hover */
 .btn-secondary {
-  @apply inline-flex items-center justify-center font-display text-base sm:text-xl uppercase tracking-wider
-         bg-transparent text-brand-cream px-5 py-2.5 sm:px-8 sm:py-3.5 border-2 border-brand-cream
+  @apply inline-flex items-center justify-center font-display uppercase tracking-wider
+         bg-transparent text-brand-cream border-2 border-brand-cream
          hover:bg-brand-cream hover:text-brand-dark
          transition-all duration-200 cursor-pointer
-         active:translate-y-0.5;
+         active:translate-y-0.5
+         text-sm px-4 py-2.5
+         sm:text-base sm:px-6 sm:py-3
+         md:text-lg md:px-8 md:py-3.5;
+  min-height: 44px;
 }
 
 /* YELLOW — Yellow fill, dark text */
 .btn-yellow {
-  @apply inline-flex items-center justify-center font-display text-base sm:text-xl uppercase tracking-wider
-         bg-brand-yellow text-brand-dark px-5 py-2.5 sm:px-8 sm:py-3.5 border-2 border-brand-yellow
+  @apply inline-flex items-center justify-center font-display uppercase tracking-wider
+         bg-brand-yellow text-brand-dark border-2 border-brand-yellow
          hover:bg-transparent hover:text-brand-yellow
          transition-all duration-200 cursor-pointer
-         active:translate-y-0.5;
+         active:translate-y-0.5
+         text-sm px-4 py-2.5
+         sm:text-base sm:px-6 sm:py-3
+         md:text-lg md:px-8 md:py-3.5;
+  min-height: 44px;
 }
 
 /* ─── Brand Tri-Color Divider ────────────────────────────────────────────── */
 .brand-divider {
   height: 3px;
   background: linear-gradient(to right, #E84103, #FBA643, #032245);
+}
+
+/* ─── Form Inputs ────────────────────────────────────────────────────────── */
+.form-input {
+  @apply w-full bg-brand-dark border-2 border-brand-blue/50 text-brand-cream 
+         px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base
+         focus:outline-none focus:border-brand-orange transition-colors;
+  min-height: 44px;
+}
+
+/* ─── Section Spacing ────────────────────────────────────────────────────── */
+.section-pad {
+  @apply py-14 sm:py-20 lg:py-28;
+}
+
+.container-pad {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
 }
 
 /* ─── Scrollbar ──────────────────────────────────────────────────────────── */

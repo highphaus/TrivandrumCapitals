@@ -24,139 +24,109 @@ const ArrowUp = ArrowUpIcon as any;
 export default function Footer() {
   return (
     <footer id="contact" className="bg-gradient-to-b from-brand-dark via-[#021730] to-brand-dark text-brand-cream border-t-4 border-brand-orange relative overflow-hidden">
-      
-      {/* Background Graphic Watermark */}
-      <div className="absolute -left-12 -bottom-16 select-none pointer-events-none opacity-5 font-display text-[18rem] text-brand-blue leading-none">
+
+      {/* Watermark */}
+      <div className="absolute -left-8 -bottom-12 select-none pointer-events-none opacity-[0.04] font-display text-[12rem] sm:text-[18rem] text-brand-blue leading-none">
         TC
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-16">
-          
-          {/* Brand & Monogram Column */}
-          <div className="lg:col-span-4 space-y-6">
+      <div className="container-pad pt-12 sm:pt-16 pb-10 sm:pb-12 relative z-10">
+
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-8 mb-10 sm:mb-16">
+
+          {/* Brand Column */}
+          <div className="sm:col-span-2 lg:col-span-4 space-y-4 sm:space-y-6">
             <div className="flex items-center gap-3">
-              <div className="relative w-12 h-12 flex items-center justify-center">
+              <div className="relative w-10 h-10 sm:w-12 sm:h-12 shrink-0">
                 <Image
                   src={clubConfig.logoUrl}
                   alt={`${clubConfig.name} Official Logo`}
                   width={48}
                   height={48}
-                  className="object-contain"
+                  className="object-contain w-full h-full"
                 />
               </div>
-              <div className="flex flex-col">
-                <span className="font-display text-3xl tracking-wider text-brand-cream uppercase leading-none">
-                  TRIVANDRUM
-                </span>
-                <span className="font-display text-xl tracking-widest text-brand-orange uppercase leading-none">
-                  CAPITALS
-                </span>
+              <div className="flex flex-col leading-none">
+                <span className="font-display text-2xl sm:text-3xl tracking-wider text-brand-cream uppercase">TRIVANDRUM</span>
+                <span className="font-display text-lg sm:text-xl tracking-widest text-brand-orange uppercase">CAPITALS</span>
               </div>
             </div>
 
-            <p className="text-sm text-brand-cream/80 leading-relaxed max-w-sm font-normal">
+            <p className="text-sm text-brand-cream/80 leading-relaxed max-w-sm">
               {clubConfig.description}
             </p>
 
             <div className="space-y-2 text-sm text-brand-cream/90">
-              <div className="flex items-center gap-2">
-                <MapPin size={16} className="text-brand-orange shrink-0" />
+              <div className="flex items-start gap-2">
+                <MapPin size={15} className="text-brand-orange shrink-0 mt-0.5" />
                 <span>{clubConfig.location}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Mail size={16} className="text-brand-yellow shrink-0" />
-                <span>{clubConfig.contact.emailPlaceholder}</span>
+                <Mail size={15} className="text-brand-yellow shrink-0" />
+                <span className="break-all">{clubConfig.contact.emailPlaceholder}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Phone size={16} className="text-brand-blue shrink-0" />
+                <Phone size={15} className="text-brand-blue shrink-0" />
                 <span>{clubConfig.contact.phonePlaceholder}</span>
               </div>
             </div>
           </div>
 
-          {/* Quick Navigation Links */}
+          {/* Navigation */}
           <div className="lg:col-span-3 space-y-4">
-            <h4 className="font-display text-xl text-brand-yellow uppercase tracking-wider border-b border-brand-blue/40 pb-2">
+            <h4 className="font-display text-lg sm:text-xl text-brand-yellow uppercase tracking-wider border-b border-brand-blue/40 pb-2">
               Navigation
             </h4>
-            <ul className="space-y-2.5 font-display text-lg tracking-wider text-brand-cream">
-              <li>
-                <Link href="#home" className="hover:text-brand-orange transition-colors uppercase">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link href="#club" className="hover:text-brand-orange transition-colors uppercase">
-                  The Club
-                </Link>
-              </li>
-              <li>
-                <Link href="#trials" className="hover:text-brand-orange transition-colors uppercase">
-                  Player Trials
-                </Link>
-              </li>
-              <li>
-                <Link href="#contact" className="hover:text-brand-orange transition-colors uppercase">
-                  Contact
-                </Link>
-              </li>
+            <ul className="space-y-2 font-display text-base sm:text-lg tracking-wider text-brand-cream">
+              {[["#home", "Home"], ["#club", "The Club"], ["#trials", "Player Trials"], ["#contact", "Contact"]].map(([href, label]) => (
+                <li key={href}>
+                  <Link href={href} className="hover:text-brand-orange transition-colors uppercase">
+                    {label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Social Media Links */}
+          {/* Social */}
           <div className="lg:col-span-2 space-y-4">
-            <h4 className="font-display text-xl text-brand-yellow uppercase tracking-wider border-b border-brand-blue/40 pb-2">
+            <h4 className="font-display text-lg sm:text-xl text-brand-yellow uppercase tracking-wider border-b border-brand-blue/40 pb-2">
               Follow Us
             </h4>
             <div className="flex flex-col space-y-3">
-              <a
-                href={clubConfig.contact.socials.instagram}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-3 text-sm text-brand-cream hover:text-brand-orange transition-colors"
-              >
-                <div className="w-8 h-8 bg-brand-blue/20 border border-brand-blue flex items-center justify-center">
-                  <Share2 size={16} />
-                </div>
-                <span>Instagram</span>
-              </a>
-              <a
-                href={clubConfig.contact.socials.facebook}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-3 text-sm text-brand-cream hover:text-brand-orange transition-colors"
-              >
-                <div className="w-8 h-8 bg-brand-blue/20 border border-brand-blue flex items-center justify-center">
-                  <Globe size={16} />
-                </div>
-                <span>Facebook</span>
-              </a>
-              <a
-                href={clubConfig.contact.socials.youtube}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-3 text-sm text-brand-cream hover:text-brand-orange transition-colors"
-              >
-                <div className="w-8 h-8 bg-brand-blue/20 border border-brand-blue flex items-center justify-center">
-                  <Video size={16} />
-                </div>
-                <span>YouTube</span>
-              </a>
+              {[
+                { href: clubConfig.contact.socials.instagram, Icon: Share2, label: "Instagram" },
+                { href: clubConfig.contact.socials.facebook, Icon: Globe, label: "Facebook" },
+                { href: clubConfig.contact.socials.youtube, Icon: Video, label: "YouTube" },
+              ].map(({ href, Icon, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-3 text-sm text-brand-cream hover:text-brand-orange transition-colors"
+                >
+                  <div className="w-8 h-8 bg-brand-blue/20 border border-brand-blue flex items-center justify-center shrink-0">
+                    <Icon size={15} />
+                  </div>
+                  <span>{label}</span>
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Player Trial Callout Box */}
-          <div className="lg:col-span-3 bg-brand-blue/15 border-2 border-brand-blue/40 p-6 space-y-4">
-            <h4 className="font-display text-2xl text-brand-cream uppercase font-bold">
+          {/* CTA Box */}
+          <div className="sm:col-span-2 lg:col-span-3 bg-brand-blue/15 border-2 border-brand-blue/40 p-4 sm:p-6 space-y-4">
+            <h4 className="font-display text-xl sm:text-2xl text-brand-cream uppercase font-bold">
               READY TO PLAY?
             </h4>
-            <p className="text-xs text-brand-cream/80 leading-relaxed">
-              Register now for Trivandrum Capitals youth & senior trial evaluations.
+            <p className="text-xs sm:text-sm text-brand-cream/80 leading-relaxed">
+              Register now for Trivandrum Capitals youth &amp; senior trial evaluations.
             </p>
             <Link
               href="/register"
-              className="btn-primary w-full py-2.5 text-center text-base block"
+              className="btn-primary w-full justify-center"
             >
               REGISTER NOW
             </Link>
@@ -164,21 +134,20 @@ export default function Footer() {
 
         </div>
 
-        {/* Bottom Copyright & Privacy Section */}
-        <div className="pt-8 border-t border-brand-blue/30 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-brand-cream/70">
-          <div className="flex items-center gap-2">
-            <Shield size={14} className="text-brand-orange shrink-0" />
+        {/* Bottom Bar */}
+        <div className="pt-6 sm:pt-8 border-t border-brand-blue/30 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-brand-cream/70">
+          <div className="flex items-center gap-2 text-center sm:text-left">
+            <Shield size={13} className="text-brand-orange shrink-0" />
             <span>{clubConfig.privacyNote}</span>
           </div>
-
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6">
             <span>{clubConfig.copyright}</span>
             <a
               href="#home"
-              className="inline-flex items-center gap-1 text-brand-yellow hover:text-brand-orange uppercase font-display text-sm tracking-wider"
+              className="inline-flex items-center gap-1 text-brand-yellow hover:text-brand-orange uppercase font-display text-xs sm:text-sm tracking-wider"
               aria-label="Back to top"
             >
-              TOP <ArrowUp size={14} />
+              TOP <ArrowUp size={12} />
             </a>
           </div>
         </div>
