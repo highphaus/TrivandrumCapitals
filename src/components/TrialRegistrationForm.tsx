@@ -465,11 +465,11 @@ export default function TrialRegistrationForm() {
   };
 
   return (
-    <section id="trials" className="section-pad bg-brand-dark relative court-overlay">
-      <div className="site-container">
+    <section id="trials" className="py-16 sm:py-20 lg:py-32 bg-brand-dark relative court-overlay">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* WELCOME BANNER & OFFICIAL LEAGUE GUIDELINES */}
-        <div className="bg-brand-dark/95 border-2 sm:border-4 border-brand-orange p-3.5 xs:p-5 sm:p-8 lg:p-10 mb-8 sm:mb-12 shadow-2xl space-y-5 sm:space-y-6 relative" id="register-form">
+        <div className="bg-brand-dark/95 border-2 sm:border-4 border-brand-orange p-4 sm:p-10 mb-8 sm:mb-12 shadow-2xl space-y-6 relative" id="register-form">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-brand-orange/40 pb-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand-orange/20 border border-brand-orange text-brand-orange font-display text-sm tracking-wider uppercase">
               <ShieldCheck size={18} />

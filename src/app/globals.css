@@ -2,42 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   TRIVANDRUM CAPITALS — Mobile-First Design System
-   Enterprise-Quality Responsive CSS (320px to 4K)
-   ───────────────────────────────────────────────────────────────────────────── */
-
-/* ─── Design Tokens ─────────────────────────────────────────────────────────── */
+/* ─── Brand Color Tokens ─────────────────────────────────────────────────── */
 :root {
-  /* Brand Colors */
-  --c-dark:    #032245;
-  --c-blue:    #1D719C;
-  --c-orange:  #E84103;
-  --c-yellow:  #FBA643;
-  --c-cream:   #FDF7D6;
-
-  /* Fluid Type Scale — clamp(min, preferred-vw, max) */
-  --t-hero:    clamp(2.125rem, 8vw, 5.5rem);     /* 34px → 88px  */
-  --t-h1:      clamp(1.75rem,  5.5vw, 4rem);     /* 28px → 64px  */
-  --t-h2:      clamp(1.375rem, 3.8vw, 2.5rem);   /* 22px → 40px  */
-  --t-h3:      clamp(1.125rem, 2.6vw, 1.75rem);  /* 18px → 28px  */
-  --t-h4:      clamp(1rem,     1.8vw, 1.375rem); /* 16px → 22px  */
-  --t-body:    clamp(0.9375rem, 1.2vw, 1.0625rem);/* 15px → 17px */
-  --t-sm:      clamp(0.8125rem, 1vw, 0.9375rem); /* 13px → 15px  */
-  --t-xs:      clamp(0.6875rem, 0.85vw, 0.8125rem);/* 11px → 13px */
-  --t-label:   clamp(0.625rem, 0.75vw, 0.75rem); /* 10px → 12px  */
-
-  /* Spacing */
-  --px-mobile: 1rem;       /* 16px */
-  --px-tablet: 1.5rem;     /* 24px */
-  --px-desktop: 2rem;      /* 32px */
-  --section-py: clamp(3rem, 7vw, 6.5rem);
-
-  /* Touch targets */
-  --touch-min: 2.75rem;    /* 44px */
+  --color-dark:   #032245;  /* Dark Blue — background        */
+  --color-blue:   #1D719C;  /* Blue — borders, structure     */
+  --color-orange: #E84103;  /* Orange — CTAs, actions        */
+  --color-yellow: #FBA643;  /* Yellow — headings, highlights */
+  --color-cream:  #FDF7D6;  /* Cream — body text             */
 }
 
-/* ─── Base Reset & Globals ───────────────────────────────────────────────────── */
+/* ─── Base Layer ─────────────────────────────────────────────────────────── */
 @layer base {
   *, *::before, *::after {
     box-sizing: border-box;
@@ -51,216 +25,128 @@
   }
 
   body {
+    background-color: var(--color-dark);
+    color: var(--color-cream);
+    font-family: var(--font-jakarta), sans-serif;
     overflow-x: hidden;
-    background-color: var(--c-dark);
-    color: var(--c-cream);
-    font-family: var(--font-jakarta), system-ui, -apple-system, sans-serif;
-    font-size: var(--t-body);
-    line-height: 1.65;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Prevent iOS input auto-zoom: text must be at least 16px */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-bebas), sans-serif;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* Prevent iOS input auto-zoom on mobile */
   input, select, textarea {
     font-size: 16px !important;
   }
 
-  img, video, picture {
-    display: block;
-    max-width: 100%;
-    height: auto;
-  }
-
-  /* All interactive elements: minimum touch target */
-  button, [role="button"], a, label[for], input[type="checkbox"], input[type="radio"] {
-    min-height: var(--touch-min);
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-bebas), sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    line-height: 1;
-  }
-
   ::selection {
-    background-color: var(--c-orange);
-    color: var(--c-cream);
+    background-color: var(--color-orange);
+    color: var(--color-cream);
   }
 }
 
-/* ─── Layout & Container Utilities ───────────────────────────────────────────── */
-@layer utilities {
-  .site-container,
-  .container-pad {
-    width: 100%;
-    max-width: 80rem;
-    margin-inline: auto;
-    padding-inline: var(--px-mobile);
-  }
-
-  @media (min-width: 640px) {
-    .site-container,
-    .container-pad {
-      padding-inline: var(--px-tablet);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .site-container,
-    .container-pad {
-      padding-inline: var(--px-desktop);
-    }
-  }
-
-  .section-spacing,
-  .section-pad {
-    padding-block: var(--section-py);
-  }
-
-  /* Fluid typography helper classes */
-  .t-hero, .fluid-hero  { font-size: var(--t-hero);  line-height: 0.95; }
-  .t-h1, .fluid-h1      { font-size: var(--t-h1);    line-height: 0.98; }
-  .t-h2, .fluid-h2      { font-size: var(--t-h2);    line-height: 1.05; }
-  .t-h3, .fluid-h3      { font-size: var(--t-h3);    line-height: 1.15; }
-  .t-h4, .fluid-h4      { font-size: var(--t-h4);    line-height: 1.25; }
-  .t-body, .prose-fluid { font-size: var(--t-body);  line-height: 1.65; }
-  .t-sm                 { font-size: var(--t-sm);    line-height: 1.55; }
-  .t-xs, .fluid-xs      { font-size: var(--t-xs);    line-height: 1.5;  }
-  .t-label, .status-label {
-    font-size: var(--t-label);
-    line-height: 1.3;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-  .status-value {
-    font-size: clamp(0.9375rem, 2vw, 1.25rem);
-    line-height: 1.1;
-    font-weight: 700;
-  }
-
-  /* Overflow and truncation utilities */
-  .no-overflow {
-    overflow: hidden;
-    overflow-x: clip;
-  }
-
-  .text-balance {
-    text-wrap: balance;
-  }
-}
-
-/* ─── Decorative Elements ────────────────────────────────────────────────────── */
+/* ─── Court Overlay & Graphic Textures ───────────────────────────────────── */
 .court-overlay {
   position: relative;
 }
+
+/* Subtle radial orange glow */
 .court-overlay::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 30% 50%, rgba(232, 65, 3, 0.05) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 30% 50%, rgba(232, 65, 3, 0.05) 0%, transparent 65%);
   pointer-events: none;
-  z-index: 0;
 }
+
+/* Basketball Key Circle Graphic */
 .court-key-circle {
-  border: 2px solid rgba(251, 166, 67, 0.15);
+  border: 2px solid rgba(251, 166, 67, 0.20);
   border-radius: 50%;
 }
 
-/* ─── Button System ──────────────────────────────────────────────────────────── */
-.btn-base {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-bebas), sans-serif;
-  font-size: clamp(0.875rem, 1.8vw, 1.0625rem);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 0.75rem 1.375rem;
-  min-height: 2.75rem;
-  border-width: 2px;
-  border-style: solid;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-  line-height: 1;
-  text-decoration: none;
-  user-select: none;
-}
+/* ─── Button System ──────────────────────────────────────────────────────── */
 
+/* PRIMARY — Orange fill → transparent on hover */
 .btn-primary {
-  @apply btn-base;
-  background-color: var(--c-orange);
-  color: var(--c-cream);
-  border-color: var(--c-orange);
-}
-.btn-primary:hover {
-  background-color: transparent;
-  color: var(--c-orange);
+  @apply inline-flex items-center justify-center font-display text-base sm:text-xl uppercase tracking-wider
+         bg-brand-orange text-brand-cream px-5 py-2.5 sm:px-8 sm:py-3.5 border-2 border-brand-orange
+         hover:bg-transparent hover:text-brand-orange
+         transition-all duration-200 cursor-pointer shadow-lg
+         active:translate-y-0.5 whitespace-nowrap leading-none;
+  min-height: 2.75rem;
 }
 
+/* SECONDARY — Transparent cream border → cream fill on hover */
 .btn-secondary {
-  @apply btn-base;
-  background-color: transparent;
-  color: var(--c-cream);
-  border-color: var(--c-cream);
-}
-.btn-secondary:hover {
-  background-color: var(--c-cream);
-  color: var(--c-dark);
+  @apply inline-flex items-center justify-center font-display text-base sm:text-xl uppercase tracking-wider
+         bg-transparent text-brand-cream px-5 py-2.5 sm:px-8 sm:py-3.5 border-2 border-brand-cream
+         hover:bg-brand-cream hover:text-brand-dark
+         transition-all duration-200 cursor-pointer
+         active:translate-y-0.5 whitespace-nowrap leading-none;
+  min-height: 2.75rem;
 }
 
+/* YELLOW — Yellow fill, dark text */
 .btn-yellow {
-  @apply btn-base;
-  background-color: var(--c-yellow);
-  color: var(--c-dark);
-  border-color: var(--c-yellow);
-}
-.btn-yellow:hover {
-  background-color: transparent;
-  color: var(--c-yellow);
+  @apply inline-flex items-center justify-center font-display text-base sm:text-xl uppercase tracking-wider
+         bg-brand-yellow text-brand-dark px-5 py-2.5 sm:px-8 sm:py-3.5 border-2 border-brand-yellow
+         hover:bg-transparent hover:text-brand-yellow
+         transition-all duration-200 cursor-pointer
+         active:translate-y-0.5 whitespace-nowrap leading-none;
+  min-height: 2.75rem;
 }
 
-/* ─── Form Elements ──────────────────────────────────────────────────────────── */
-.form-field {
+/* ─── Brand Tri-Color Divider ────────────────────────────────────────────── */
+.brand-divider {
+  height: 3px;
+  background: linear-gradient(to right, #E84103, #FBA643, #032245);
+}
+
+/* ─── Layout Utility Helpers ─────────────────────────────────────────────── */
+.container-pad,
+.site-container {
   width: 100%;
-  background-color: color-mix(in srgb, var(--c-dark), transparent 5%);
-  border: 2px solid color-mix(in srgb, var(--c-blue), transparent 50%);
-  color: var(--c-cream);
-  padding: 0.75rem 1rem;
-  font-size: 16px;
-  transition: border-color 0.2s;
-  min-height: var(--touch-min);
-  border-radius: 0;
-  outline: none;
-  -webkit-appearance: none;
-  appearance: none;
-}
-.form-field:focus {
-  border-color: var(--c-orange);
-}
-.form-field::placeholder {
-  color: rgba(253, 247, 214, 0.3);
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
 }
 
-/* ─── Section Badge ──────────────────────────────────────────────────────────── */
-.section-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.375rem 0.75rem;
-  background: color-mix(in srgb, var(--c-blue), transparent 75%);
-  border-left: 3px solid var(--c-orange);
-  font-size: var(--t-label);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-weight: 700;
-  color: var(--c-cream);
+@media (min-width: 640px) {
+  .container-pad,
+  .site-container {
+    padding-inline: 1.5rem;
+  }
 }
 
-/* ─── Scrollbar ──────────────────────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: var(--c-dark); }
-::-webkit-scrollbar-thumb { background: var(--c-blue); }
-::-webkit-scrollbar-thumb:hover { background: var(--c-orange); }
+@media (min-width: 1024px) {
+  .container-pad,
+  .site-container {
+    padding-inline: 2rem;
+  }
+}
+
+.section-pad,
+.section-spacing {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+@media (min-width: 1024px) {
+  .section-pad,
+  .section-spacing {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #010e1e; }
+::-webkit-scrollbar-thumb { background: #032245; border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: #E84103; }
