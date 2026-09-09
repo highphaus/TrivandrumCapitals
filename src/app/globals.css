@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-dark: #032245;
+  --color-blue: #1D719C;
+  --color-orange: #E84103;
+  --color-yellow: #FBA643;
+  --color-cream: #FDF7D6;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-dark);
+    color: var(--color-cream);
+    font-family: var(--font-jakarta), sans-serif;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-bebas), sans-serif;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+}
+
+/* Court lines graphic accent overlay */
+.court-overlay {
+  background-image: 
+    linear-gradient(to right, rgba(29, 113, 156, 0.15) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(29, 113, 156, 0.15) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Basketball Key Line graphic */
+.court-key-circle {
+  border: 2px solid rgba(251, 166, 67, 0.25);
+  border-radius: 50%;
+}
+
+/* Sharp athletic button styles */
+.btn-primary {
+  @apply inline-flex items-center justify-center font-display text-xl uppercase tracking-wider bg-brand-orange text-brand-cream px-8 py-3.5 border-2 border-brand-orange hover:bg-transparent hover:text-brand-orange transition-all duration-200 cursor-pointer shadow-lg active:translate-y-0.5;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center font-display text-xl uppercase tracking-wider bg-transparent text-brand-cream px-8 py-3.5 border-2 border-brand-cream hover:bg-brand-cream hover:text-brand-dark transition-all duration-200 cursor-pointer active:translate-y-0.5;
+}
+
+.btn-yellow {
+  @apply inline-flex items-center justify-center font-display text-xl uppercase tracking-wider bg-brand-yellow text-brand-dark px-8 py-3.5 border-2 border-brand-yellow hover:bg-transparent hover:text-brand-yellow transition-all duration-200 cursor-pointer active:translate-y-0.5;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #032245;
+}
+::-webkit-scrollbar-thumb {
+  background: #1D719C;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #E84103;
+}
