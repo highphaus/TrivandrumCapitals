@@ -59,14 +59,22 @@ export default function Hero() {
             {clubConfig.heroSubtext}
           </p>
 
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
-            <Link href="/register" className="btn-primary group text-center justify-center" id="hero-primary-cta">
-              REGISTER FOR TRIALS
-              <ArrowRight size={22} className="ml-2 group-hover:translate-x-1 transition-transform inline-block" />
+          {/* CTAs — Horizontal on both mobile and desktop */}
+          <div className="flex flex-row items-center gap-2 sm:gap-4 w-full sm:w-auto">
+            <Link
+              href="/register"
+              className="btn-primary group text-center justify-center flex-1 sm:flex-initial !text-xs xs:!text-sm sm:!text-xl !px-2.5 xs:!px-4 sm:!px-8 !py-2.5 sm:!py-3.5"
+              id="hero-primary-cta"
+            >
+              <span className="truncate">REGISTER FOR TRIALS</span>
+              <ArrowRight className="w-3.5 h-3.5 sm:w-5 sm:h-5 ml-1 sm:ml-2 group-hover:translate-x-1 transition-transform inline-block shrink-0" />
             </Link>
-            <Link href="#club" className="btn-secondary text-center justify-center" id="hero-secondary-cta">
-              DISCOVER THE CLUB
+            <Link
+              href="#club"
+              className="btn-secondary text-center justify-center flex-1 sm:flex-initial !text-xs xs:!text-sm sm:!text-xl !px-2.5 xs:!px-4 sm:!px-8 !py-2.5 sm:!py-3.5"
+              id="hero-secondary-cta"
+            >
+              <span className="truncate">DISCOVER THE CLUB</span>
             </Link>
           </div>
 
