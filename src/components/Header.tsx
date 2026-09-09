@@ -152,7 +152,7 @@ export default function Header() {
           <Link
             href="/register"
             onClick={() => setMobileMenuOpen(false)}
-            className="w-full btn-primary py-3 text-center block mt-4"
+            className="w-full py-2.5 text-center block mt-4 btn-primary text-base"
           >
             REGISTER NOW
           </Link>

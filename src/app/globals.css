@@ -56,8 +56,8 @@
 
 /* PRIMARY — Orange fill → transparent on hover */
 .btn-primary {
-  @apply inline-flex items-center justify-center font-display text-xl uppercase tracking-wider
-         bg-brand-orange text-brand-cream px-8 py-3.5 border-2 border-brand-orange
+  @apply inline-flex items-center justify-center font-display text-base sm:text-xl uppercase tracking-wider
+         bg-brand-orange text-brand-cream px-5 py-2.5 sm:px-8 sm:py-3.5 border-2 border-brand-orange
          hover:bg-transparent hover:text-brand-orange
          transition-all duration-200 cursor-pointer shadow-lg
          active:translate-y-0.5;
@@ -65,8 +65,8 @@
 
 /* SECONDARY — Transparent cream border → cream fill on hover */
 .btn-secondary {
-  @apply inline-flex items-center justify-center font-display text-xl uppercase tracking-wider
-         bg-transparent text-brand-cream px-8 py-3.5 border-2 border-brand-cream
+  @apply inline-flex items-center justify-center font-display text-base sm:text-xl uppercase tracking-wider
+         bg-transparent text-brand-cream px-5 py-2.5 sm:px-8 sm:py-3.5 border-2 border-brand-cream
          hover:bg-brand-cream hover:text-brand-dark
          transition-all duration-200 cursor-pointer
          active:translate-y-0.5;
@@ -74,8 +74,8 @@
 
 /* YELLOW — Yellow fill, dark text */
 .btn-yellow {
-  @apply inline-flex items-center justify-center font-display text-xl uppercase tracking-wider
-         bg-brand-yellow text-brand-dark px-8 py-3.5 border-2 border-brand-yellow
+  @apply inline-flex items-center justify-center font-display text-base sm:text-xl uppercase tracking-wider
+         bg-brand-yellow text-brand-dark px-5 py-2.5 sm:px-8 sm:py-3.5 border-2 border-brand-yellow
          hover:bg-transparent hover:text-brand-yellow
          transition-all duration-200 cursor-pointer
          active:translate-y-0.5;
