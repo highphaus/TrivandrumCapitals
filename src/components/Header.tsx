@@ -49,11 +49,11 @@ export default function Header() {
                 priority
               />
             </div>
-            <div className="flex flex-col">
-              <span className="font-display text-xl sm:text-2xl tracking-wider text-brand-cream uppercase leading-none group-hover:text-brand-yellow transition-colors">
+            <div className="flex flex-col justify-center -space-y-1 sm:-space-y-1.5">
+              <span className="font-display text-xl sm:text-2xl tracking-tight sm:tracking-normal text-brand-cream uppercase leading-none group-hover:text-brand-yellow transition-colors">
                 TRIVANDRUM
               </span>
-              <span className="font-display text-base sm:text-lg tracking-widest text-brand-orange uppercase leading-none mt-0.5">
+              <span className="font-display text-base sm:text-lg tracking-tight sm:tracking-normal text-brand-orange uppercase leading-none">
                 CAPITALS
               </span>
             </div>
