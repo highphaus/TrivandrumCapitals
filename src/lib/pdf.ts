@@ -289,7 +289,7 @@ export async function generateRegistrationPdf(data: RegistrationEmailData): Prom
         // Subheader
         doc.rect(leftMargin, rY, contentWidth, 13).fill("#E2E8F0");
         doc.font("Helvetica-Bold").fontSize(7).fillColor("#334155");
-        doc.text("SL / JERSEY", leftMargin + 8, rY + 3, { width: 60, lineBreak: false });
+        doc.text("SL NO.", leftMargin + 8, rY + 3, { width: 60, lineBreak: false });
         doc.text("PLAYER FULL NAME", leftMargin + 75, rY + 3, { width: 270, lineBreak: false });
         doc.text("DATE OF BIRTH (DD/MM/YYYY)", pageWidth - rightMargin - 160, rY + 3, { width: 150, align: "right", lineBreak: false });
         rY += 13;

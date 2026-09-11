@@ -194,11 +194,6 @@ export async function sendRegistrationEmails(data: RegistrationEmailData): Promi
           ${u12BoysHtml}
           ${u12GirlsHtml}
 
-          <div style="background-color: #ECFDF5; border: 1px solid #10B981; padding: 12px 16px; border-radius: 6px; margin-top: 20px; color: #065F46; font-size: 13px; line-height: 1.5;">
-            <strong>📎 Official Registration Docket (PDF) Attached:</strong><br />
-            An official print-ready PDF (<strong>BLK_Registration_${data.referenceNo}.pdf</strong>) containing all team rosters, verification rules, and signature sections has been generated and attached.
-          </div>
-
           <div style="margin-top: 20px; padding: 14px; background: #F3F4F6; border-left: 4px solid #E84103; font-size: 12px; color: #6B7280;">
             This is an automated notification from the Trivandrum Capitals League Registration Portal.
           </div>
@@ -254,11 +249,6 @@ export async function sendRegistrationEmails(data: RegistrationEmailData): Promi
             <tr><td style="color: #6B7280;">Total Players:</td><td>${data.totalPlayers} Players</td></tr>
             <tr><td style="color: #6B7280;">Total Registration Fee:</td><td><strong style="color: #032245;">₹${data.totalFee.toLocaleString("en-IN")}</strong></td></tr>
           </table>
-
-          <div style="background-color: #ECFDF5; border: 1px solid #10B981; padding: 12px 16px; border-radius: 6px; margin: 18px 0; color: #065F46; font-size: 13px; line-height: 1.5;">
-            <strong>📎 Official Registration Docket (PDF) Attached:</strong><br />
-            An official print-ready PDF (<strong>BLK_Registration_${data.referenceNo}.pdf</strong>) containing verified institution details, team rosters, and league rules has been attached to this email.
-          </div>
 
           <div style="background-color: #EFF6FF; border: 1px solid #93C5FD; padding: 14px; border-radius: 4px; margin-top: 18px; font-size: 13px; color: #1E40AF; line-height: 1.5;">
             <strong>Next Steps:</strong><br />
