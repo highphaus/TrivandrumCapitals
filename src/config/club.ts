@@ -92,10 +92,10 @@ export const clubConfig = {
 
   contact: {
     address: "Thiruvananthapuram, Kerala, India",
-    emailPlaceholder: "league@trivandrumcapitals.com",
-    phonePlaceholder: "+91 471 000 0000",
+    emailPlaceholder: "trivandrumcapitals@gmail.com",
+    phonePlaceholder: "+91 77366 65965",
     socials: {
-      instagram: "https://instagram.com",
+      instagram: "https://www.instagram.com/trivandrum_capitals?stkn=NGRvcHh4Z256MjF6",
       facebook: "https://facebook.com",
       youtube: "https://youtube.com",
     },

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { clubConfig } from "@/config/club";
 import { schoolRegistrationSchema, checkDobEligibility } from "@/lib/validation";
 import { ZodError } from "zod";
@@ -12,6 +12,7 @@ import {
   Copy as CopyIcon,
   Check as CheckIcon,
   Plus as PlusIcon,
+  PlusCircle as PlusCircleIcon,
   Trash2 as Trash2Icon,
   School as SchoolIcon,
   UserCheck as UserCheckIcon,
@@ -27,6 +28,7 @@ const Loader2 = Loader2Icon as any;
 const Copy = CopyIcon as any;
 const Check = CheckIcon as any;
 const Plus = PlusIcon as any;
+const PlusCircle = PlusCircleIcon as any;
 const Trash2 = Trash2Icon as any;
 const School = SchoolIcon as any;
 const UserCheck = UserCheckIcon as any;
@@ -352,6 +354,31 @@ export default function TrialRegistrationForm() {
   } | null>(null);
   const [copied, setCopied] = useState(false);
 
+  // Pre-load saved primary school and representative details from localStorage
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("tc_primary_school_data");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setFormData((prev) => ({
+          ...prev,
+          schoolName: prev.schoolName || parsed.schoolName || "",
+          schoolAddress: prev.schoolAddress || parsed.schoolAddress || "",
+          syllabus: prev.syllabus || parsed.syllabus || "",
+          otherSyllabus: prev.otherSyllabus || parsed.otherSyllabus || "",
+          schoolEmail: prev.schoolEmail || parsed.schoolEmail || "",
+          schoolPhone: prev.schoolPhone || parsed.schoolPhone || "",
+          repName: prev.repName || parsed.repName || "",
+          repDesignation: prev.repDesignation || parsed.repDesignation || "",
+          otherDesignation: prev.otherDesignation || parsed.otherDesignation || "",
+          repPhone: prev.repPhone || parsed.repPhone || "",
+          repEmail: prev.repEmail || parsed.repEmail || "",
+          consent: true,
+        }));
+      }
+    } catch (e) {}
+  }, []);
+
   // Dynamic calculations
   const teamCount = [
     formData.registerU10Boys,
@@ -372,6 +399,29 @@ export default function TrialRegistrationForm() {
       setFormData((prev) => ({ ...prev, [name]: checked }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
+
+      // Auto-persist primary school and representative fields to localStorage
+      const primaryFields = [
+        "schoolName",
+        "schoolAddress",
+        "syllabus",
+        "otherSyllabus",
+        "schoolEmail",
+        "schoolPhone",
+        "repName",
+        "repDesignation",
+        "otherDesignation",
+        "repPhone",
+        "repEmail",
+      ];
+      if (primaryFields.includes(name)) {
+        try {
+          const existing = localStorage.getItem("tc_primary_school_data");
+          const current = existing ? JSON.parse(existing) : {};
+          current[name] = value;
+          localStorage.setItem("tc_primary_school_data", JSON.stringify(current));
+        } catch (err) {}
+      }
     }
 
     // Auto-clear error when user modifies the field
@@ -438,30 +488,65 @@ export default function TrialRegistrationForm() {
 
     startTransition(async () => {
       try {
-        const validatedData = schoolRegistrationSchema.parse(formData);
+        // 1. Client-side validation check
+        schoolRegistrationSchema.parse(formData);
 
-        await new Promise((resolve) => setTimeout(resolve, 800));
+        // 2. Call backend API to process registration & dispatch Nodemailer emails
+        const res = await fetch("/api/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
 
-        const refNo = generateReferenceNumber();
+        const result = await res.json();
 
-        const registeredCategories: string[] = [];
-        if (validatedData.registerU10Boys) registeredCategories.push("U10 Boys");
-        if (validatedData.registerU10Girls) registeredCategories.push("U10 Girls");
-        if (validatedData.registerU12Boys) registeredCategories.push("U12 Boys");
-        if (validatedData.registerU12Girls) registeredCategories.push("U12 Girls");
-
-        const finalFee = registeredCategories.length * clubConfig.leagueInfo.feeStructure.perTeam;
+        if (!res.ok) {
+          if (result.fieldErrors) {
+            setFieldErrors(result.fieldErrors);
+          }
+          setGeneralError(result.error || "Submission failed. Please check the highlighted errors.");
+          const formTop = document.getElementById("register-form");
+          if (formTop) {
+            formTop.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+          return;
+        }
 
         setSuccessData({
-          referenceNo: refNo,
-          message: "School Registration received! Your BLK Buddies League application has been submitted successfully.",
-          schoolName: validatedData.schoolName,
-          repName: validatedData.repName,
-          repEmail: validatedData.repEmail,
-          registeredCategories,
-          totalPlayers: registeredCategories.length * 10,
-          totalFee: finalFee,
+          referenceNo: result.referenceNo,
+          message: result.message,
+          schoolName: result.schoolName,
+          repName: result.repName,
+          repEmail: result.repEmail,
+          registeredCategories: result.registeredCategories,
+          totalPlayers: result.totalPlayers,
+          totalFee: result.totalFee,
         });
+
+        // Retain primary school and representative details so schools can submit multiple forms!
+        setFormData((prev) => ({
+          ...initialFormState,
+          schoolName: prev.schoolName,
+          schoolAddress: prev.schoolAddress,
+          syllabus: prev.syllabus,
+          otherSyllabus: prev.otherSyllabus,
+          schoolEmail: prev.schoolEmail,
+          schoolPhone: prev.schoolPhone,
+          repName: prev.repName,
+          repDesignation: prev.repDesignation,
+          otherDesignation: prev.otherDesignation,
+          repPhone: prev.repPhone,
+          repEmail: prev.repEmail,
+          consent: true,
+          registerU10Boys: false,
+          registerU10Girls: false,
+          registerU12Boys: false,
+          registerU12Girls: false,
+          u10BoysPlayers: createInitialPlayers(),
+          u10GirlsPlayers: createInitialPlayers(),
+          u12BoysPlayers: createInitialPlayers(),
+          u12GirlsPlayers: createInitialPlayers(),
+        }));
 
         window.scrollTo({ top: 100, behavior: "smooth" });
       } catch (err: unknown) {
@@ -497,11 +582,49 @@ export default function TrialRegistrationForm() {
     }
   };
 
-  const handleResetForm = () => {
+  // Submit another form for this school: Keeps all primary details, resets team rosters & categories
+  const handleRegisterAnotherTeam = () => {
+    setFormData((prev) => ({
+      ...initialFormState,
+      schoolName: prev.schoolName,
+      schoolAddress: prev.schoolAddress,
+      syllabus: prev.syllabus,
+      otherSyllabus: prev.otherSyllabus,
+      schoolEmail: prev.schoolEmail,
+      schoolPhone: prev.schoolPhone,
+      repName: prev.repName,
+      repDesignation: prev.repDesignation,
+      otherDesignation: prev.otherDesignation,
+      repPhone: prev.repPhone,
+      repEmail: prev.repEmail,
+      consent: true,
+      registerU10Boys: false,
+      registerU10Girls: false,
+      registerU12Boys: false,
+      registerU12Girls: false,
+      u10BoysPlayers: createInitialPlayers(),
+      u10GirlsPlayers: createInitialPlayers(),
+      u12BoysPlayers: createInitialPlayers(),
+      u12GirlsPlayers: createInitialPlayers(),
+    }));
+    setSuccessData(null);
+    setFieldErrors({});
+    setGeneralError(null);
+    const formTop = document.getElementById("register-form");
+    if (formTop) {
+      formTop.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  // Full reset (only if user explicitly wishes to register an entirely different school)
+  const handleClearAll = () => {
     setFormData(initialFormState);
     setSuccessData(null);
     setFieldErrors({});
     setGeneralError(null);
+    try {
+      localStorage.removeItem("tc_primary_school_data");
+    } catch (e) {}
   };
 
   return (
@@ -645,15 +768,29 @@ export default function TrialRegistrationForm() {
                 A confirmation summary has been sent to representative email <strong className="text-brand-cream">{successData.repEmail}</strong>. Our league committee will issue tournament match fixtures soon.
               </p>
 
-              <div className="pt-2 sm:pt-4 flex justify-center">
+              <div className="pt-2 sm:pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
                 <button
                   type="button"
-                  onClick={handleResetForm}
-                  className="btn-secondary w-full sm:w-auto text-center"
+                  onClick={handleRegisterAnotherTeam}
+                  className="btn-primary w-full sm:w-auto text-center flex items-center justify-center gap-2 text-sm sm:text-base py-3 px-6 shadow-xl"
+                  id="btn-register-another"
                 >
-                  Register Another School
+                  <PlusCircle size={18} />
+                  Submit Another Team for {successData.schoolName || "This School"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleClearAll}
+                  className="btn-secondary w-full sm:w-auto text-center text-xs py-2.5 px-4"
+                  id="btn-clear-all"
+                >
+                  Register a Different School
                 </button>
               </div>
+              <p className="text-[11px] text-green-400 max-w-md mx-auto flex items-center justify-center gap-1.5 pt-1">
+                <Check size={14} className="text-green-400 shrink-0" />
+                <span>School details & representative details are preserved for your next registration.</span>
+              </p>
             </div>
           </div>
         ) : (
@@ -686,7 +823,14 @@ export default function TrialRegistrationForm() {
                     1. School Details
                   </h3>
                 </div>
-                <span className="text-[11px] sm:text-xs text-brand-cream/60 uppercase font-semibold">Step 1 of 4</span>
+                <div className="flex items-center gap-2">
+                  {formData.schoolName && (
+                    <span className="hidden sm:inline-flex items-center gap-1 text-[11px] text-green-400 bg-green-950/60 border border-green-500/30 px-2 py-0.5 font-medium">
+                      <Check size={12} /> School Details Retained
+                    </span>
+                  )}
+                  <span className="text-[11px] sm:text-xs text-brand-cream/60 uppercase font-semibold">Step 1 of 4</span>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">

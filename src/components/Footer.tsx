@@ -5,7 +5,6 @@ import {
   MapPin as MapPinIcon,
   Mail as MailIcon,
   Phone as PhoneIcon,
-  Share2 as Share2Icon,
   Globe as GlobeIcon,
   Video as VideoIcon,
   Shield as ShieldIcon,
@@ -15,11 +14,30 @@ import {
 const MapPin = MapPinIcon as any;
 const Mail = MailIcon as any;
 const Phone = PhoneIcon as any;
-const Share2 = Share2Icon as any;
 const Globe = GlobeIcon as any;
 const Video = VideoIcon as any;
 const Shield = ShieldIcon as any;
 const ArrowUp = ArrowUpIcon as any;
+
+function InstagramIcon({ size = 16, className = "" }: { size?: number; className?: string }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+    </svg>
+  );
+}
 
 export default function Footer() {
   return (
@@ -69,11 +87,21 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <Mail size={15} className="text-brand-yellow shrink-0" />
-                <span className="break-all">{clubConfig.contact.emailPlaceholder}</span>
+                <a
+                  href="mailto:trivandrumcapitals@gmail.com"
+                  className="hover:text-brand-yellow transition-colors break-all"
+                >
+                  trivandrumcapitals@gmail.com
+                </a>
               </div>
               <div className="flex items-center gap-2">
                 <Phone size={15} className="text-brand-blue shrink-0" />
-                <span>{clubConfig.contact.phonePlaceholder}</span>
+                <a
+                  href="tel:+917736665965"
+                  className="hover:text-brand-blue transition-colors"
+                >
+                  +91 77366 65965
+                </a>
               </div>
             </div>
           </div>
@@ -117,15 +145,16 @@ export default function Footer() {
               </h4>
               <div className="flex flex-col space-y-2 sm:space-y-3">
                 <a
-                  href={clubConfig.contact.socials.instagram}
+                  href="https://www.instagram.com/trivandrum_capitals?stkn=NGRvcHh4Z256MjF6"
                   target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm text-brand-cream hover:text-brand-orange transition-colors py-0.5"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm text-brand-cream hover:text-brand-orange transition-colors py-0.5 group"
+                  aria-label="Follow Trivandrum Capitals on Instagram"
                 >
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-brand-blue/20 border border-brand-blue flex items-center justify-center shrink-0">
-                    <Share2 size={14} />
+                  <div className="w-8 h-8 rounded bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center shrink-0 shadow-md transform group-hover:scale-110 transition-transform">
+                    <InstagramIcon size={16} className="text-white" />
                   </div>
-                  <span>Instagram</span>
+                  <span className="font-medium group-hover:text-brand-yellow transition-colors">Instagram</span>
                 </a>
                 <a
                   href={clubConfig.contact.socials.facebook}

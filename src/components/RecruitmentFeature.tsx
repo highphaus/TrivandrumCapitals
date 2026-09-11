@@ -17,29 +17,18 @@ export default function RecruitmentFeature() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 items-center">
           
-          {/* Left Column: Image with Court Framing */}
-          <div className="lg:col-span-6 relative">
-            <div className="relative h-[280px] xs:h-[340px] sm:h-[480px] w-full border-4 border-brand-blue/40 p-2 bg-brand-dark">
-              <div className="relative h-full w-full overflow-hidden">
+          {/* Left Column: Clean Image with Exact Aspect Ratio */}
+          <div className="lg:col-span-6 relative flex justify-center">
+            <div className="relative w-full max-w-[480px] sm:max-w-[520px] aspect-[4/5] border-2 sm:border-4 border-brand-blue/40 p-1.5 sm:p-2 bg-brand-dark shadow-2xl overflow-hidden group">
+              <div className="relative h-full w-full overflow-hidden bg-brand-dark">
                 <Image
-                  src="/images/recruitment-action.jpg"
-                  alt="Player Recruitment Action - Trivandrum Capitals"
+                  src="/images/blk-buddies.jpeg"
+                  alt="BLK Buddies Basketball Tournament"
                   fill
-                  className="object-cover object-center transition-all duration-500 transform hover:scale-105"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-contain object-center transition-all duration-500 group-hover:scale-[1.02]"
+                  sizes="(max-width: 1024px) 100vw, 520px"
+                  priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-transparent opacity-80" />
-              </div>
-
-              {/* Angle Box Graphic Accent */}
-              <div className="absolute -bottom-4 -right-4 sm:-bottom-5 sm:-right-5 bg-brand-orange text-brand-cream p-3 sm:p-4 border-2 border-brand-yellow shadow-xl hidden xs:block">
-                <div className="font-display text-2xl sm:text-3xl font-bold leading-none">TC 2026</div>
-                <div className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold">TRIAL SEASON</div>
-              </div>
-
-              {/* Tag Badge */}
-              <div className="absolute top-4 left-4 sm:top-6 sm:left-6 bg-brand-dark/90 text-brand-yellow font-display text-sm sm:text-lg tracking-wider px-3 py-1 sm:px-4 sm:py-1.5 border border-brand-yellow">
-                OFFICIAL TRIALS
               </div>
             </div>
           </div>

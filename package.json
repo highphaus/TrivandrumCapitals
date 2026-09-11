@@ -9,9 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/pdfkit": "^0.17.6",
     "clsx": "^2.1.1",
     "lucide-react": "^0.475.0",
     "next": "latest",
+    "nodemailer": "^10.0.1",
+    "pdfkit": "^0.20.2",
     "react": "latest",
     "react-dom": "latest",
     "tailwind-merge": "^2.5.4",
@@ -19,6 +22,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
+    "@types/nodemailer": "^8.0.1",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "autoprefixer": "^10.4.20",
