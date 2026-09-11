@@ -96,7 +96,7 @@ export const clubConfig = {
     phonePlaceholder: "+91 77366 65965",
     socials: {
       instagram: "https://www.instagram.com/trivandrum_capitals?stkn=NGRvcHh4Z256MjF6",
-      facebook: "https://facebook.com",
+      facebook: "https://www.facebook.com/share/p/1EkLbqp1rp/",
       youtube: "https://youtube.com",
     },
   },
