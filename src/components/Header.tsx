@@ -62,16 +62,22 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8" aria-label="Main Navigation">
             <Link
-              href="#home"
+              href="/#home"
               className="font-display text-lg tracking-wider text-brand-cream hover:text-brand-yellow transition-colors uppercase py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-orange hover:after:w-full after:transition-all"
             >
               Home
             </Link>
             <Link
-              href="#club"
+              href="/#club"
               className="font-display text-lg tracking-wider text-brand-cream hover:text-brand-yellow transition-colors uppercase py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-orange hover:after:w-full after:transition-all"
             >
               The Club
+            </Link>
+            <Link
+              href="/partners"
+              className="font-display text-lg tracking-wider text-brand-cream hover:text-brand-yellow transition-colors uppercase py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-orange hover:after:w-full after:transition-all"
+            >
+              Partners
             </Link>
             <Link
               href="/register"
@@ -80,7 +86,7 @@ export default function Header() {
               Register
             </Link>
             <Link
-              href="#contact"
+              href="/#contact"
               className="font-display text-lg tracking-wider text-brand-cream hover:text-brand-yellow transition-colors uppercase py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-brand-orange hover:after:w-full after:transition-all"
             >
               Contact
@@ -118,18 +124,25 @@ export default function Header() {
         <div className="md:hidden bg-brand-dark/98 border-b-2 border-brand-orange px-4 pt-4 pb-6 space-y-4 shadow-2xl animate-in slide-in-from-top-5 duration-200">
           <nav className="flex flex-col space-y-3">
             <Link
-              href="#home"
+              href="/#home"
               onClick={() => setMobileMenuOpen(false)}
               className="font-display text-xl sm:text-2xl tracking-wider text-brand-cream hover:text-brand-orange flex items-center justify-between border-b border-brand-blue/30 pb-2"
             >
               HOME <ChevronRight size={20} className="text-brand-orange" />
             </Link>
             <Link
-              href="#club"
+              href="/#club"
               onClick={() => setMobileMenuOpen(false)}
               className="font-display text-xl sm:text-2xl tracking-wider text-brand-cream hover:text-brand-orange flex items-center justify-between border-b border-brand-blue/30 pb-2"
             >
               THE CLUB <ChevronRight size={20} className="text-brand-orange" />
+            </Link>
+            <Link
+              href="/partners"
+              onClick={() => setMobileMenuOpen(false)}
+              className="font-display text-xl sm:text-2xl tracking-wider text-brand-cream hover:text-brand-orange flex items-center justify-between border-b border-brand-blue/30 pb-2"
+            >
+              PARTNERS &amp; SPONSORS <ChevronRight size={20} className="text-brand-orange" />
             </Link>
             <Link
               href="/register"
@@ -139,7 +152,7 @@ export default function Header() {
               REGISTER <ChevronRight size={20} className="text-brand-orange" />
             </Link>
             <Link
-              href="#contact"
+              href="/#contact"
               onClick={() => setMobileMenuOpen(false)}
               className="font-display text-xl sm:text-2xl tracking-wider text-brand-cream hover:text-brand-orange flex items-center justify-between border-b border-brand-blue/30 pb-2"
             >

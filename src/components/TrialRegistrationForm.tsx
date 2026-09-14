@@ -1,7 +1,10 @@
 "use client";
 
 import { useState, useTransition, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { clubConfig } from "@/config/club";
+import { partnersAndSponsors } from "@/config/partners";
 import { schoolRegistrationSchema, checkDobEligibility } from "@/lib/validation";
 import { ZodError } from "zod";
 import {
@@ -698,6 +701,42 @@ export default function TrialRegistrationForm() {
             </div>
             <div className="text-xs text-brand-cream/80 max-w-xs sm:text-right font-medium">
               Fees are calculated based on registered team categories.
+            </div>
+          </div>
+
+          {/* Official Sanctions, Partners & Sponsors Row */}
+          <div className="pt-4 border-t border-brand-blue/30">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+              <div className="text-xs uppercase tracking-wider font-semibold text-brand-cream/90 flex items-center gap-1.5">
+                <ShieldCheck size={14} className="text-brand-orange" />
+                <span>Official Sanctioning Bodies, Partners &amp; Sponsors</span>
+              </div>
+              <Link
+                href="/partners"
+                className="text-xs text-brand-yellow hover:text-brand-orange transition-colors font-sans underline"
+              >
+                View full partner details &rarr;
+              </Link>
+            </div>
+            <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
+              {partnersAndSponsors.map((entity) => (
+                <Link
+                  key={entity.id}
+                  href={`/partners#${entity.id}`}
+                  title={`${entity.name} (${entity.category})`}
+                  className="h-11 sm:h-12 bg-white rounded p-1.5 flex items-center justify-center hover:scale-105 hover:shadow-md transition-transform border border-brand-blue/40 group"
+                >
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={entity.logoUrl}
+                      alt={entity.name}
+                      fill
+                      className="object-contain"
+                      sizes="80px"
+                    />
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         </div>

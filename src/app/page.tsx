@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import TrialStatusBar from "@/components/TrialStatusBar";
 import ClubSection from "@/components/ClubSection";
 import RecruitmentFeature from "@/components/RecruitmentFeature";
+import PartnersStrip from "@/components/PartnersStrip";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
         <TrialStatusBar />
         <ClubSection />
         <RecruitmentFeature />
+        <PartnersStrip />
       </main>
       <Footer />
     </div>

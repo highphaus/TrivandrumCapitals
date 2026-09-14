@@ -140,22 +140,27 @@ export default function Footer() {
               </h4>
               <ul className="space-y-1.5 sm:space-y-2.5 font-display text-base sm:text-lg tracking-wider text-brand-cream">
                 <li>
-                  <Link href="#home" className="hover:text-brand-orange transition-colors uppercase inline-block py-0.5">
+                  <Link href="/#home" className="hover:text-brand-orange transition-colors uppercase inline-block py-0.5">
                     Home
                   </Link>
                 </li>
                 <li>
-                  <Link href="#club" className="hover:text-brand-orange transition-colors uppercase inline-block py-0.5">
+                  <Link href="/#club" className="hover:text-brand-orange transition-colors uppercase inline-block py-0.5">
                     The Club
                   </Link>
                 </li>
                 <li>
-                  <Link href="/register" className="hover:text-brand-orange transition-colors uppercase inline-block py-0.5">
-                    Player Trials
+                  <Link href="/partners" className="hover:text-brand-orange transition-colors uppercase inline-block py-0.5">
+                    Partners &amp; Sponsors
                   </Link>
                 </li>
                 <li>
-                  <Link href="#contact" className="hover:text-brand-orange transition-colors uppercase inline-block py-0.5">
+                  <Link href="/register" className="hover:text-brand-orange transition-colors uppercase inline-block py-0.5">
+                    School Registration
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/#contact" className="hover:text-brand-orange transition-colors uppercase inline-block py-0.5">
                     Contact
                   </Link>
                 </li>
@@ -225,6 +230,20 @@ export default function Footer() {
             </Link>
           </div>
 
+        </div>
+
+        {/* Official Ecosystem & Sponsors Banner */}
+        <div className="py-4 px-4 bg-brand-blue/10 border border-brand-blue/30 rounded mb-8 flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-left">
+          <div className="text-xs uppercase tracking-wider text-brand-cream/90">
+            <span className="text-brand-orange font-bold mr-2">Official Sanctioning &amp; Sponsors:</span>
+            <span className="text-brand-cream/70 font-sans">KBA &bull; TDBA &bull; BLK &bull; Starting Five &bull; ABC &bull; Wattsun &bull; Ekalavyas</span>
+          </div>
+          <Link
+            href="/partners"
+            className="text-xs text-brand-yellow hover:text-brand-orange transition-colors font-display tracking-wider uppercase underline underline-offset-4 shrink-0"
+          >
+            Explore All Profiles &rarr;
+          </Link>
         </div>
 
         {/* Bottom Copyright & Privacy Section — Horizontal row on mobile and desktop */}
