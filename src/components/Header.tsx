@@ -142,7 +142,7 @@ export default function Header() {
               onClick={() => setMobileMenuOpen(false)}
               className="font-display text-xl sm:text-2xl tracking-wider text-brand-cream hover:text-brand-orange flex items-center justify-between border-b border-brand-blue/30 pb-2"
             >
-              PARTNERS &amp; SPONSORS <ChevronRight size={20} className="text-brand-orange" />
+              PARTNERS & SPONSORS <ChevronRight size={20} className="text-brand-orange" />
             </Link>
             <Link
               href="/register"

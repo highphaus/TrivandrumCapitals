@@ -17,7 +17,6 @@ import {
   CheckCircle2 as CheckCircle2Icon,
   ArrowRight as ArrowRightIcon,
   Sparkles as SparklesIcon,
-  Building2 as Building2Icon,
   Calendar as CalendarIcon,
   Mail as MailIcon,
   Phone as PhoneIcon,
@@ -29,7 +28,6 @@ const Award = AwardIcon as any;
 const CheckCircle2 = CheckCircle2Icon as any;
 const ArrowRight = ArrowRightIcon as any;
 const Sparkles = SparklesIcon as any;
-const Building2 = Building2Icon as any;
 const Calendar = CalendarIcon as any;
 const Mail = MailIcon as any;
 const Phone = PhoneIcon as any;
@@ -57,11 +55,11 @@ export default function PartnersPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-blue/20 border border-brand-blue/40 text-brand-orange text-xs sm:text-sm font-semibold uppercase tracking-widest mb-4">
               <ShieldCheck size={16} />
-              <span>Official Ecosystem &amp; Sanctioning Bodies</span>
+              <span>Official Ecosystem & Sanctioning Bodies</span>
             </div>
 
             <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl text-brand-cream uppercase tracking-tight font-bold">
-              PARTNERS &amp; <span className="text-brand-orange">SPONSORS</span>
+              PARTNERS & <span className="text-brand-orange">SPONSORS</span>
             </h1>
 
             <p className="mt-4 text-base sm:text-xl text-brand-cream/80 max-w-3xl mx-auto leading-relaxed font-normal">
@@ -215,17 +213,6 @@ export default function PartnersPage() {
                     <p className="text-sm sm:text-base text-brand-cream/90 leading-relaxed font-normal">
                       {entity.description}
                     </p>
-
-                    {/* Deep Explanation Section */}
-                    <div className="p-4 sm:p-5 rounded-lg bg-brand-dark/90 border border-brand-blue/30 space-y-2">
-                      <div className="flex items-center gap-2 text-xs uppercase font-bold tracking-wider text-brand-yellow">
-                        <Building2 size={15} className="text-brand-orange" />
-                        <span>Background &amp; Deep Research</span>
-                      </div>
-                      <p className="text-xs sm:text-sm text-brand-cream/80 leading-relaxed">
-                        {entity.deepExplanation}
-                      </p>
-                    </div>
 
                     {/* Strategic Impact List */}
                     <div className="space-y-2.5 pt-1">

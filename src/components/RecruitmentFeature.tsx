@@ -22,7 +22,7 @@ export default function RecruitmentFeature() {
             <div className="relative w-full max-w-[480px] sm:max-w-[520px] aspect-[4/5] border-2 sm:border-4 border-brand-blue/40 p-1.5 sm:p-2 bg-brand-dark shadow-2xl overflow-hidden group">
               <div className="relative h-full w-full overflow-hidden bg-brand-dark">
                 <Image
-                  src="/images/blk-buddies.jpeg"
+                  src="/images/blk buddies.png"
                   alt="BLK Buddies Basketball Tournament"
                   fill
                   className="object-contain object-center transition-all duration-500 group-hover:scale-[1.02]"

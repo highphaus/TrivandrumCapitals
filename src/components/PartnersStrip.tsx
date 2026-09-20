@@ -22,10 +22,10 @@ export default function PartnersStrip() {
           <div>
             <div className="flex items-center gap-2 text-brand-orange uppercase text-xs sm:text-sm font-semibold tracking-widest mb-1.5">
               <ShieldCheck size={16} />
-              <span>Official Ecosystem &amp; Sanctions</span>
+              <span>Official Ecosystem & Sanctions</span>
             </div>
             <h2 className="font-display text-2xl sm:text-4xl text-brand-cream uppercase tracking-wide">
-              OUR <span className="text-brand-yellow">PARTNERS</span> &amp;{" "}
+              OUR <span className="text-brand-yellow">PARTNERS</span> &{" "}
               <span className="text-brand-orange">SPONSORS</span>
             </h2>
             <p className="text-xs sm:text-sm text-brand-cream/70 max-w-xl mt-1">
@@ -37,7 +37,7 @@ export default function PartnersStrip() {
             href="/partners"
             className="inline-flex items-center gap-2 text-xs sm:text-sm font-display text-brand-yellow hover:text-brand-orange uppercase tracking-wider transition-colors shrink-0 group py-1"
           >
-            <span>Explore All 7 Profiles &amp; Impact</span>
+            <span>Explore All 7 Profiles & Impact</span>
             <ArrowRight size={16} className="transform group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>

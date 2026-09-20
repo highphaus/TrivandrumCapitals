@@ -151,7 +151,7 @@ export default function Footer() {
                 </li>
                 <li>
                   <Link href="/partners" className="hover:text-brand-orange transition-colors uppercase inline-block py-0.5">
-                    Partners &amp; Sponsors
+                    Partners & Sponsors
                   </Link>
                 </li>
                 <li>
@@ -220,7 +220,7 @@ export default function Footer() {
               READY TO PLAY?
             </h4>
             <p className="text-xs sm:text-sm text-brand-cream/80 leading-relaxed">
-              Register now for Trivandrum Capitals youth &amp; senior trial evaluations.
+              Register now for Trivandrum Capitals youth & senior trial evaluations.
             </p>
             <Link
               href="/register"
@@ -235,7 +235,7 @@ export default function Footer() {
         {/* Official Ecosystem & Sponsors Banner */}
         <div className="py-4 px-4 bg-brand-blue/10 border border-brand-blue/30 rounded mb-8 flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-left">
           <div className="text-xs uppercase tracking-wider text-brand-cream/90">
-            <span className="text-brand-orange font-bold mr-2">Official Sanctioning &amp; Sponsors:</span>
+            <span className="text-brand-orange font-bold mr-2">Official Sanctioning & Sponsors:</span>
             <span className="text-brand-cream/70 font-sans">KBA &bull; TDBA &bull; BLK &bull; Starting Five &bull; ABC &bull; Wattsun &bull; Ekalavyas</span>
           </div>
           <Link

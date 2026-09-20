@@ -709,7 +709,7 @@ export default function TrialRegistrationForm() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
               <div className="text-xs uppercase tracking-wider font-semibold text-brand-cream/90 flex items-center gap-1.5">
                 <ShieldCheck size={14} className="text-brand-orange" />
-                <span>Official Sanctioning Bodies, Partners &amp; Sponsors</span>
+                <span>Official Sanctioning Bodies, Partners & Sponsors</span>
               </div>
               <Link
                 href="/partners"
